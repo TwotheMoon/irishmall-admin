@@ -5,7 +5,6 @@ import { RecoilRoot } from 'recoil'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
-import { isLocalAtom } from './atom'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
