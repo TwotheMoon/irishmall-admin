@@ -5,6 +5,7 @@ import { RecoilRoot } from 'recoil'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
+import { isLocalAtom } from './atom'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -35,8 +36,8 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      {/* <HashRouter> */}
       <HashRouter basename={process.env.PUBLIC_URL}>
+      {/* <HashRouter> */}
         <Suspense
           fallback={
             <div className="pt-3 text-center">

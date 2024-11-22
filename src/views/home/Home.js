@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useRef, useEffect } from 'react'
 import {
   CAlert,
@@ -18,19 +17,34 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
+import { commerceApiId, commerceApiUrl, commerceCate, commerceProxyNm, commerceToken, jsonAxios, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
+import axios from 'axios';
+import qs from 'qs';
+import { createSignature, getPopularCategories } from '../../utils';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { allCateAtom, isLocalAtom, tokenAtom } from '../../atom';
 
 const Home = () => {
   const txArea1Ref = useRef();
   const txArea2Ref = useRef();
   const loginInputRef = useRef();
+  const searchInputRef = useRef();
+  const topNCateNameRefs = Array.from({ length: 3 }, () => useRef(null));
+  const topNCateIdRefs = Array.from({ length: 3 }, () => useRef(null));
+
   const [txBoxSize] = useState(200);
   const [showAlert, setShowAlert] = useState(false);
+  const [showCateCopy, setShowCateCopy] = useState(false);
   const [showDupAlert, setShowDupAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [keywordUrl, setKeywordUrl] = useState();
   const [duplicateWordCount, setDuplicateWordCount] = useState(0);
   const [duplicateState, setDuplicateState] = useState(false);
   let newNaverId;
+
+  const isLocal = useRecoilValue(isLocalAtom);
+  const [accessToken, setAccessToken] = useRecoilState(tokenAtom);
+  const [allCate, setAllCate] = useRecoilState(allCateAtom);  
 
   // 키워드 변환 정규식
   const Conversion = () => {
@@ -130,6 +144,124 @@ const Home = () => {
       duplicateWords.clear();
   };
 
+  // 상품 카테고리코드 조회
+  const getCateNm = async (keyword) => {
+    if(!keyword) return;
+
+    try {
+        const res = await jsonAxios.get(`${isLocal ? naverProxyNm : openApiUrl}${naverApiShopUrl}`, {
+        params: { 
+          query: keyword,
+          display: 50,
+          exclude: "used:rental:cbshop"
+        }
+      });
+
+      const productsArr = res.data.items;
+      const popularCate = getPopularCategories(productsArr);
+
+      for(let i = 0; i <= popularCate.length; i++){
+        if(popularCate[i] != false){
+          let findedCateId = allCate.filter(item => item.wholeCategoryName.includes(popularCate[i]))[0].id;
+
+          topNCateNameRefs[i].current.value = popularCate[i];
+          topNCateIdRefs[i].current.value = findedCateId;
+        } else {
+          topNCateNameRefs[i].current.value = "";
+          topNCateIdRefs[i].current.value = "";
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  // OAth 인증토큰 발급
+  const getToken = async () => {
+    if(accessToken) return;
+    
+    const client_id = commerceApiId;
+    const timestamp = Date.now();
+    const grant_type = 'client_credentials';
+    const client_secret_sign = await createSignature();
+    const type = 'SELF';
+
+    const data = {
+      client_id,
+      timestamp,
+      grant_type,
+      client_secret_sign,
+      type,
+      // account_id
+    };
+
+    try {
+      const res = await axios.post(`${isLocal ? commerceProxyNm : commerceApiUrl}${commerceToken}`, qs.stringify(data), {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }  
+      });
+      setAccessToken(res.data.access_token);
+      return res.data.access_token;
+
+    } catch (error) {
+        console.log(error);
+        alert("오류 :( 관리자에게 문의해주세요.");
+    }
+  };
+
+  // 전체 카테고리 호출
+  const getAllCate = async (firstAccessToken) => {
+    let token;
+    if(!accessToken && !firstAccessToken) {
+      await getToken();
+      return await getAllCate(true);
+    } else if(accessToken && !firstAccessToken){
+      token = accessToken;
+    } else if (!accessToken && firstAccessToken){
+      token = firstAccessToken;
+    }
+
+    try {
+      const res = await axios.get(`${isLocal ? commerceProxyNm : commerceApiUrl }${commerceCate}`,{
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      setAllCate(res.data);
+      console.log(res.data)
+    } catch (error) {
+        console.log(error);      
+    }
+  };
+
+  // 상위 키워드 검색
+  const getPopularCate = (ref) => {
+    const keyword = searchInputRef.current.value;
+    getCateNm(keyword);
+  };
+
+  const showCateCopyAlert = (ref) => {
+    try {
+      if (ref.current && ref.current.value !== "") {
+        ref.current.select();
+        
+        document.execCommand('copy');
+        
+        setShowCateCopy(true);
+        setTimeout(() => {
+          setShowCateCopy(false);
+        }, 1500);
+      }
+      
+    } catch (error) {
+      console.log(error);      
+    }
+  }
+
+  const serverTest = async () => {
+      const res = await axios.get("http://localhost:8090");
+      console.log(res);
+  }
+  
+  // 키워드 도구 아이프레임 최초 로그인 
   useEffect(() => {
     let naverId;
     naverId = localStorage.getItem("naverId");
@@ -141,8 +273,55 @@ const Home = () => {
     }
   });
 
+  // 최초 토큰 발급, 전체 카테고리 저장
+  useEffect(() => {
+    const getData = async () => {
+      await getToken().then( async (res) => {
+        await getAllCate(res)
+      })
+    }
+    getData();
+    console.log("토큰", accessToken);
+    console.log("카테고리", allCate);
+  }, []);  
+
   return (
     <>
+    <CCard className="mb-4 d-flex align-item-center justify-contents-center" >
+      <CCardHeader className='position-relative d-flex justify-content-between'>
+        카테고리 찾기
+        <div className='d-flex w-100 gap-3' style={{maxWidth: "400px"}}>
+          <CFormInput ref={searchInputRef} type="text" size="sm" placeholder="키워드 입력"/>
+          <CButton style={{maxHeight: "30px", paddingTop: "2px", minWidth: "80px" }} as="input" type="button" color="primary" value="검색" onClick={() => getPopularCate()} />
+        </div>
+        <CAlert 
+          color="primary"
+          className='position-absolute end-0'
+          style={{top: "-70px", zIndex: 9999}}
+          dismissible 
+          visible={showCateCopy} 
+          onClose={() => setShowCateCopy(false)}
+          >
+            복사되었습니다.
+        </CAlert>
+      </CCardHeader>
+      <CCardBody className='position-relative'>
+        <div>
+          <div className='d-flex w-100 gap-3 mb-2'>
+            <CFormInput ref={topNCateNameRefs[0]} type="text" size="sm" placeholder="상위노출 카테고리 1" readOnly/>
+            <CFormInput ref={topNCateIdRefs[0]} onClick={() => showCateCopyAlert(topNCateIdRefs[0])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
+          </div>
+          <div className='d-flex w-100 gap-3 mb-2'>
+            <CFormInput ref={topNCateNameRefs[1]} type="text" size="sm" placeholder="상위노출 카테고리 2" readOnly/>
+            <CFormInput ref={topNCateIdRefs[1]} onClick={() => showCateCopyAlert(topNCateIdRefs[1])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center" }} className='bg-secondary' type="text" size="sm" readOnly />
+          </div>
+          <div className='d-flex w-100 gap-3'>
+            <CFormInput ref={topNCateNameRefs[2]} type="text" size="sm" placeholder="상위노출 카테고리 3" readOnly/>
+            <CFormInput ref={topNCateIdRefs[2]} onClick={() => showCateCopyAlert(topNCateIdRefs[2])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
       <CCard className="mb-4 d-flex align-item-center justify-contents-center" >
         <CCardHeader className='position-relative'>
           쉼표 변환기
@@ -168,7 +347,11 @@ const Home = () => {
         <CCardBody>
           <CForm className='d-flex justify-content-center align-items-center'>
             <div className="mb-3 w-100">
-              <CFormLabel htmlFor="textArea1">키워드 입력 &nbsp; <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> </CFormLabel>
+              <CFormLabel htmlFor="textArea1">
+                키워드 입력 &nbsp; 
+                <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> 
+                <CButton color="primary" onClick={() => serverTest()}>서버테스트</CButton> 
+              </CFormLabel>
               <CFormTextarea 
                 id="textArea1" 
                 ref={txArea1Ref}

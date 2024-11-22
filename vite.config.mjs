@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 import autoprefixer from 'autoprefixer'
+import { commerceApiUrl, openApiUrl } from './src/api'
 
 export default defineConfig(() => {
   return {
@@ -47,7 +48,16 @@ export default defineConfig(() => {
     server: {
       port: 3000,
       proxy: {
-        // https://vitejs.dev/config/server-options.html
+        '/openApi': {
+          target: openApiUrl,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/openApi/, ''),
+        },
+        '/commerceApi': {
+          target: commerceApiUrl,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/commerceApi/, ''),
+        },
       },
     },
   }
