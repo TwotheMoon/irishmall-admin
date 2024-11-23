@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState, createRef, useRef } from 'react'
+import React from 'react'
 import {
   CCard,
   CCardBody,

@@ -1,22 +1,3 @@
-import { commerceApiId, commerceApiSecret } from "./api";
-import bcryptjs from 'bcryptjs'
-
-
-//  자격증명 만들기
-export const createSignature = async () => {
-  const client_id = commerceApiId
-  const client_secret = commerceApiSecret;
-  const timestamp = Date.now();
-  
-  const data = `${client_id}_${timestamp}`;
-  const saltRounds = client_secret;
-
-  const signature = await bcryptjs.hash(data, saltRounds);
-  const base64Signature = btoa(signature);
-
-  return base64Signature;
-}
-
 // 카테고리 배열 문자 포멧 전환
 export const formatCategory = (data) => {
   const categories = [

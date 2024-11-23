@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useEffect, useState, createRef, useRef } from 'react'
 import {
   CCard,

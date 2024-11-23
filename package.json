@@ -1,16 +1,8 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
+  "name": "moondashboard",
   "version": "5.2.0",
-  "description": "CoreUI Free React Admin Template",
+  "description": "irishmall dashboard",
   "homepage": "https://moondashboard.netlify.app/",
-  "bugs": {
-    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
-  },
-  "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
     "build": "vite build",
@@ -28,8 +20,6 @@
     "@coreui/utils": "^2.0.2",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.7.7",
-    "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.4",
     "classnames": "^2.5.1",
     "core-js": "^3.38.1",

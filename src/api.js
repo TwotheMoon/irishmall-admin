@@ -1,5 +1,12 @@
 import axios from "axios"
 
+// api 서버 url
+export const apiServerBaseUrl = "https://port-0-irishmall-api-server-m3u68qma5d734195.sel4.cloudtype.app";
+export const localServerBaseUrl = "http://localhost:4000";
+export const getTokenApiEP = "/getToken";
+export const getAllCateApiEP = "/getAllCate";
+export const healthCkEP = "/health";
+
 // 네이버 base api url
 export const openApiUrl = "https://openapi.naver.com";
 export const commerceApiUrl = "https://api.commerce.naver.com";
@@ -11,10 +18,6 @@ export const commerceProxyNm = "/commerceApi";
 // 네이버 openapi ID
 export const naverApiId = '6Dy6rODwmUMPQjbUp8Wp';
 export const naverApiSecret = 'UtnRYGy8ve';
-
-// 네이버 커머스 api ID
-export const commerceApiId = 'XJ5XuywzJiutNH0e0j7kp';
-export const commerceApiSecret = '$2a$04$Qkk7RaGFRukaT/lLaZ9ql.';
 
 // 네이버 쇼핑 api endpoint
 export const naverApiShopUrl = "/v1/search/shop.json";

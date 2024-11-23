@@ -17,10 +17,9 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
-import { commerceApiId, commerceApiUrl, commerceCate, commerceProxyNm, commerceToken, jsonAxios, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
+import { apiServerBaseUrl, commerceApiUrl, commerceCate, commerceProxyNm, getTokenApiEP, healthCkEP, jsonAxios, localServerBaseUrl, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
 import axios from 'axios';
-import qs from 'qs';
-import { createSignature, getPopularCategories } from '../../utils';
+import { getPopularCategories } from '../../utils';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { allCateAtom, isLocalAtom, tokenAtom } from '../../atom';
 
@@ -47,7 +46,7 @@ const Home = () => {
   const [allCate, setAllCate] = useRecoilState(allCateAtom);  
 
   // 키워드 변환 정규식
-  const Conversion = () => {
+  const conversion = () => {
     const keywords = txArea1Ref.current.value;
     const conversionedWords = keywords
     .replace(/\n/g, ',')
@@ -77,18 +76,6 @@ const Home = () => {
   const reset = () => {
     txArea1Ref.current.value = "";
     txArea2Ref.current.value = "";
-  };
-
-  // 네이버 광고 아이디 입력
-  const setNaverId = () => {
-    if(!loginInputRef.current.value){
-      alert("ID 번호를 입력해주세요.");
-    } else {
-      newNaverId = loginInputRef.current.value;
-      localStorage.setItem('naverId', newNaverId);    
-      alert("로그인 되었습니다.");
-      window.location.reload();
-    }
   };
 
   // 키워드 중복 검사
@@ -144,7 +131,7 @@ const Home = () => {
       duplicateWords.clear();
   };
 
-  // 상품 카테고리코드 조회
+  // 상품 카테고리코드 조회 ***
   const getCateNm = async (keyword) => {
     if(!keyword) return;
 
@@ -176,43 +163,32 @@ const Home = () => {
     }
   };
 
-  // OAth 인증토큰 발급
-  const getToken = async () => {
-    if(accessToken) return;
-    
-    const client_id = commerceApiId;
-    const timestamp = Date.now();
-    const grant_type = 'client_credentials';
-    const client_secret_sign = await createSignature();
-    const type = 'SELF';
-
-    const data = {
-      client_id,
-      timestamp,
-      grant_type,
-      client_secret_sign,
-      type,
-      // account_id
-    };
-
+  // 서버 상태 확인
+  const serverHealthCk = async () => {
     try {
-      const res = await axios.post(`${isLocal ? commerceProxyNm : commerceApiUrl}${commerceToken}`, qs.stringify(data), {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }  
-      });
+      const res = await axios.get(`${ isLocal ? localServerBaseUrl : apiServerBaseUrl }${healthCkEP}`);
+      return res.data.status;
+    } catch (error) {}
+  }
+
+  // OAth 인증토큰 발급
+  const getTokenApi = async () => {
+    try {
+      const res = await axios.post(`${ isLocal ? localServerBaseUrl : apiServerBaseUrl }${getTokenApiEP}`);
+      console.log(res.data.access_token);
       setAccessToken(res.data.access_token);
+      
       return res.data.access_token;
-
     } catch (error) {
-        console.log(error);
-        alert("오류 :( 관리자에게 문의해주세요.");
+      console.log(error);
     }
-  };
+  }
 
-  // 전체 카테고리 호출
+  // 전체 카테고리 호출 ***
   const getAllCate = async (firstAccessToken) => {
     let token;
     if(!accessToken && !firstAccessToken) {
-      await getToken();
+      await getTokenApi();
       return await getAllCate(true);
     } else if(accessToken && !firstAccessToken){
       token = accessToken;
@@ -234,9 +210,9 @@ const Home = () => {
 
   // 상위 키워드 검색
   const getPopularCate = (ref) => {
-    const keyword = searchInputRef.current.value;
-    getCateNm(keyword);
-  };
+      const keyword = searchInputRef.current.value;
+      getCateNm(keyword);
+    };
 
   const showCateCopyAlert = (ref) => {
     try {
@@ -256,10 +232,17 @@ const Home = () => {
     }
   }
 
-  const serverTest = async () => {
-      const res = await axios.get("http://localhost:8090");
-      console.log(res);
-  }
+  // 네이버 광고 아이디 입력
+  const setNaverId = () => {
+    if(!loginInputRef.current.value){
+      alert("ID 번호를 입력해주세요.");
+    } else {
+      newNaverId = loginInputRef.current.value;
+      localStorage.setItem('naverId', newNaverId);    
+      alert("로그인 되었습니다.");
+      window.location.reload();
+    }
+  };
   
   // 키워드 도구 아이프레임 최초 로그인 
   useEffect(() => {
@@ -273,16 +256,23 @@ const Home = () => {
     }
   });
 
-  // 최초 토큰 발급, 전체 카테고리 저장
+  // 최초 토큰 발급, 전체 카테고리 저장 **
   useEffect(() => {
     const getData = async () => {
-      await getToken().then( async (res) => {
+      await getTokenApi().then( async (res) => {
         await getAllCate(res)
       })
-    }
-    getData();
-    console.log("토큰", accessToken);
-    console.log("카테고리", allCate);
+    };
+    (async () => {
+      await serverHealthCk().then((status) => {
+        if(status){
+          console.log("Server is running :)")
+          // getData();
+        } else {
+          console.log("Server has problem :(")
+        }
+      })
+    })();
   }, []);  
 
   return (
@@ -350,7 +340,7 @@ const Home = () => {
               <CFormLabel htmlFor="textArea1">
                 키워드 입력 &nbsp; 
                 <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> 
-                <CButton color="primary" onClick={() => serverTest()}>서버테스트</CButton> 
+                <CButton color="primary" onClick={() => serverHealthCheck()}>서버테스트</CButton> 
               </CFormLabel>
               <CFormTextarea 
                 id="textArea1" 
@@ -363,7 +353,7 @@ const Home = () => {
               </div>
             </div>
               <div className='px-3 d-flex flex-column gap-4'>
-                <CButton as="input" type="button" color="primary" value="변환" onClick={Conversion} />
+                <CButton as="input" type="button" color="primary" value="변환" onClick={conversion} />
                 <CButton as="input" type="button" color="secondary" value="초기화" onClick={reset} />
               </div>
             <div className="mb-3 w-100">
