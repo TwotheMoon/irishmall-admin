@@ -17,7 +17,7 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
-import { apiServerBaseUrl, commerceApiUrl, commerceCate, commerceProxyNm, getTokenApiEP, healthCkEP, jsonAxios, localServerBaseUrl, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
+import { apiServerBaseUrl, getAllCateApiEP, getPopularCateApiEP, getTokenApiEP, healthCkEP, jsonAxios, localServerBaseUrl, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
 import axios from 'axios';
 import { getPopularCategories } from '../../utils';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -136,12 +136,8 @@ const Home = () => {
     if(!keyword) return;
 
     try {
-        const res = await jsonAxios.get(`${isLocal ? naverProxyNm : openApiUrl}${naverApiShopUrl}`, {
-        params: { 
-          query: keyword,
-          display: 50,
-          exclude: "used:rental:cbshop"
-        }
+        const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
+        data: keyword
       });
 
       const productsArr = res.data.items;
@@ -184,7 +180,7 @@ const Home = () => {
     }
   }
 
-  // 전체 카테고리 호출 ***
+  // 전체 카테고리 호출
   const getAllCate = async (firstAccessToken) => {
     let token;
     if(!accessToken && !firstAccessToken) {
@@ -197,12 +193,12 @@ const Home = () => {
     }
 
     try {
-      const res = await axios.get(`${isLocal ? commerceProxyNm : commerceApiUrl }${commerceCate}`,{
-        headers: { 'Authorization': `Bearer ${token}` }
+      const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl }${getAllCateApiEP}`,{
+          data: token
       });
 
+      console.log("allCate", res.data);
       setAllCate(res.data);
-      console.log(res.data)
     } catch (error) {
         console.log(error);      
     }
@@ -256,18 +252,20 @@ const Home = () => {
     }
   });
 
-  // 최초 토큰 발급, 전체 카테고리 저장 **
+  // 최초 토큰 발급, 전체 카테고리 저장
   useEffect(() => {
     const getData = async () => {
       await getTokenApi().then( async (res) => {
         await getAllCate(res)
       })
     };
+    
+    // 서버 상태확인
     (async () => {
       await serverHealthCk().then((status) => {
         if(status){
           console.log("Server is running :)")
-          // getData();
+           getData();
         } else {
           console.log("Server has problem :(")
         }
@@ -340,7 +338,7 @@ const Home = () => {
               <CFormLabel htmlFor="textArea1">
                 키워드 입력 &nbsp; 
                 <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> 
-                <CButton color="primary" onClick={() => serverHealthCheck()}>서버테스트</CButton> 
+                <CButton color="primary" onClick={() => getCateNm()}>서버테스트</CButton> 
               </CFormLabel>
               <CFormTextarea 
                 id="textArea1" 

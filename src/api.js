@@ -6,6 +6,7 @@ export const localServerBaseUrl = "http://localhost:4000";
 export const getTokenApiEP = "/getToken";
 export const getAllCateApiEP = "/getAllCate";
 export const healthCkEP = "/health";
+export const getPopularCateApiEP = "/getPopularCate";
 
 // 네이버 base api url
 export const openApiUrl = "https://openapi.naver.com";
