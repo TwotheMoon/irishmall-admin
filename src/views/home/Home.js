@@ -338,7 +338,6 @@ const Home = () => {
               <CFormLabel htmlFor="textArea1">
                 키워드 입력 &nbsp; 
                 <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> 
-                <CButton color="primary" onClick={() => getCateNm()}>서버테스트</CButton> 
               </CFormLabel>
               <CFormTextarea 
                 id="textArea1" 
