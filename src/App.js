@@ -35,8 +35,8 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      {/* <HashRouter basename={process.env.PUBLIC_URL}> */}
-      <HashRouter>
+      <HashRouter basename={process.env.PUBLIC_URL}>
+      {/* <HashRouter> */}
         <Suspense
           fallback={
             <div className="pt-3 text-center">
