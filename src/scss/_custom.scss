@@ -1,1 +1,9 @@
-// Here you can add other styles
+.accordion-button:not(.collapsed) {
+  background-color: #282D37;
+  color: #FFFFFFDF;
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: var(--cui-accordion-btn-icon) !important;
+  transform: var(--cui-accordion-btn-icon-transform);
+}

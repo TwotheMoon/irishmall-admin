@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {
+  CAccordion,
+  CAccordionBody,
+  CAccordionHeader,
+  CAccordionItem,
   CAlert,
   CButton,
   CCard,
@@ -17,7 +21,7 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
-import { apiServerBaseUrl, getAllCateApiEP, getPopularCateApiEP, getTokenApiEP, healthCkEP, jsonAxios, localServerBaseUrl, naverApiShopUrl, naverProxyNm, openApiUrl } from '../../api';
+import { apiServerBaseUrl, getAllCateApiEP, getPopularCateApiEP, getTokenApiEP, healthCkEP, localServerBaseUrl } from '../../api';
 import axios from 'axios';
 import { getPopularCategories } from '../../utils';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -78,6 +82,16 @@ const Home = () => {
     txArea2Ref.current.value = "";
   };
 
+  // 카테고리 찾기 초기화
+  const resetPopularCateRef = () => {
+    topNCateNameRefs.forEach((ref) => {
+      ref.current.value = "";
+    });
+    topNCateIdRefs.forEach((ref) => {
+      ref.current.value = "";
+    });
+  }
+
   // 키워드 중복 검사
   const checkDuplicate = () => {
     let separatorType;
@@ -131,8 +145,9 @@ const Home = () => {
       duplicateWords.clear();
   };
 
-  // 상품 카테고리코드 조회 ***
+  // 상품 카테고리코드 조회
   const getCateNm = async (keyword) => {
+    resetPopularCateRef()
     if(!keyword) return;
 
     try {
@@ -205,7 +220,8 @@ const Home = () => {
   };
 
   // 상위 키워드 검색
-  const getPopularCate = (ref) => {
+  const getPopularCate = (e) => {
+      e.stopPropagation();
       const keyword = searchInputRef.current.value;
       getCateNm(keyword);
     };
@@ -275,64 +291,90 @@ const Home = () => {
 
   return (
     <>
-    <CCard className="mb-4 d-flex align-item-center justify-contents-center" >
-      <CCardHeader className='position-relative d-flex justify-content-between'>
-        카테고리 찾기
-        <div className='d-flex w-100 gap-3' style={{maxWidth: "400px"}}>
-          <CFormInput ref={searchInputRef} type="text" size="sm" placeholder="키워드 입력"/>
-          <CButton style={{maxHeight: "30px", paddingTop: "2px", minWidth: "80px" }} as="input" type="button" color="primary" value="검색" onClick={() => getPopularCate()} />
-        </div>
-        <CAlert 
-          color="primary"
-          className='position-absolute end-0'
-          style={{top: "-70px", zIndex: 9999}}
-          dismissible 
-          visible={showCateCopy} 
-          onClose={() => setShowCateCopy(false)}
-          >
-            복사되었습니다.
-        </CAlert>
-      </CCardHeader>
-      <CCardBody className='position-relative'>
+    <CAccordion alwaysOpen activeItemKey={1}>
+      {/* 카테고리 찾기 */}
+      <CAccordionItem itemKey={1} className='mb-4'>
+        <CAccordionHeader className='w-100'>
+          <div className='position-relative d-flex justify-content-between w-100'>
+            카테고리 찾기
+            <div className='d-flex w-100 gap-3' style={{maxWidth: "400px"}}>
+              <CFormInput 
+                ref={searchInputRef} 
+                style={{zIndex: 9999}} 
+                type="text" size="sm" 
+                placeholder="키워드 입력" 
+                onClick={(e) => e.stopPropagation()} 
+                onKeyDown={(e) => {
+                  if(e.key === "Enter") {
+                    getPopularCate(e);
+                  }
+                }}
+              />
+              <CButton 
+                style={{maxHeight: "30px", paddingTop: "2px", minWidth: "80px", marginRight: "20px" }} 
+                as="input" 
+                type="button" 
+                color="primary" 
+                value="검색" 
+                onClick={(e) => getPopularCate(e)} 
+              />
+            </div>
+            <CAlert 
+              color="primary"
+              className='position-absolute end-0'
+              style={{top: "-70px", zIndex: 9999}}
+              dismissible 
+              visible={showCateCopy} 
+              onClose={() => setShowCateCopy(false)}
+              >
+                복사되었습니다.
+            </CAlert>
+          </div>
+       </CAccordionHeader>
+       <CAccordionBody>
         <div>
           <div className='d-flex w-100 gap-3 mb-2'>
-            <CFormInput ref={topNCateNameRefs[0]} type="text" size="sm" placeholder="상위노출 카테고리 1" readOnly/>
-            <CFormInput ref={topNCateIdRefs[0]} onClick={() => showCateCopyAlert(topNCateIdRefs[0])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
+            <CFormInput ref={topNCateNameRefs[0]} type="text" size="sm" placeholder="상위노출 카테고리 1" readOnly />
+            <CFormInput ref={topNCateIdRefs[0]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[0], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
           </div>
           <div className='d-flex w-100 gap-3 mb-2'>
-            <CFormInput ref={topNCateNameRefs[1]} type="text" size="sm" placeholder="상위노출 카테고리 2" readOnly/>
-            <CFormInput ref={topNCateIdRefs[1]} onClick={() => showCateCopyAlert(topNCateIdRefs[1])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center" }} className='bg-secondary' type="text" size="sm" readOnly />
+            <CFormInput ref={topNCateNameRefs[1]} type="text" size="sm" placeholder="상위노출 카테고리 2" readOnly />
+            <CFormInput ref={topNCateIdRefs[1]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[1], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center" }} className='bg-secondary' type="text" size="sm" readOnly />
           </div>
           <div className='d-flex w-100 gap-3'>
-            <CFormInput ref={topNCateNameRefs[2]} type="text" size="sm" placeholder="상위노출 카테고리 3" readOnly/>
-            <CFormInput ref={topNCateIdRefs[2]} onClick={() => showCateCopyAlert(topNCateIdRefs[2])} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
+            <CFormInput ref={topNCateNameRefs[2]} type="text" size="sm" placeholder="상위노출 카테고리 3" readOnly />
+            <CFormInput ref={topNCateIdRefs[2]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[2], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
           </div>
         </div>
-      </CCardBody>
-    </CCard>
-      <CCard className="mb-4 d-flex align-item-center justify-contents-center" >
-        <CCardHeader className='position-relative'>
+       </CAccordionBody>
+      </CAccordionItem>
+
+      {/* 쉼표 변환기 */}
+      <CAccordionItem itemKey={2} className='mb-4'>
+        <CAccordionHeader className='w-100 position-relative'>
           쉼표 변환기
           <CAlert 
-            color="primary"
-            className='position-absolute top-0 end-0'
-            dismissible 
-            visible={showAlert} 
-            onClose={() => setShowAlert(false)}
-            >
-              복사되었습니다.
-          </CAlert>
-          <CAlert 
-            color={duplicateState ? "success" : "primary"}
-            className='position-absolute top-0 start-0'
-            dismissible 
-            visible={showDupAlert} 
-            onClose={() => setShowDupAlert(false)}
-            >
-              {duplicateState ? `총 ${duplicateWordCount}개의 중복된 키워드를 삭제했습니다.` : "중복된 키워드가 없습니다."}
-          </CAlert>
-        </CCardHeader>
-        <CCardBody>
+              color="primary"
+              className='position-absolute end-0'
+              style={{top: "50px"}}
+              dismissible 
+              visible={showAlert} 
+              onClose={() => setShowAlert(false)}
+              >
+                복사되었습니다.
+            </CAlert>
+            <CAlert 
+              color={duplicateState ? "success" : "primary"}
+              className='position-absolute start-0'
+              style={{top: "50px"}}
+              dismissible 
+              visible={showDupAlert} 
+              onClose={() => setShowDupAlert(false)}
+              >
+                {duplicateState ? `총 ${duplicateWordCount}개의 중복된 키워드를 삭제했습니다.` : "중복된 키워드가 없습니다."}
+            </CAlert>
+        </CAccordionHeader>
+        <CAccordionBody>
           <CForm className='d-flex justify-content-center align-items-center'>
             <div className="mb-3 w-100">
               <CFormLabel htmlFor="textArea1">
@@ -365,21 +407,28 @@ const Home = () => {
               </CFormTextarea>
             </div>
           </CForm>
-        </CCardBody>
-      </CCard>
+        </CAccordionBody>
+      </CAccordionItem>
       
       {/* 키워드 검색 툴 */}
-      <CCard className='w-100 h-100 mt-4'>
-       <div className='w-100 h-100'>
-          <iframe 
-            src={keywordUrl}
-            className='w-100'
-            style={{minHeight: '1000px'}}
-          ></iframe>
-        </div>
-      </CCard>
+      <CAccordionItem itemKey={2} className='mb-4'>
+        <CAccordionHeader className='w-100'>
+          키워드 검색 툴
+        </CAccordionHeader>
+        <CAccordionBody>
+          <CCard className='w-100 h-100 mt-4'>
+            <div className='w-100 h-100'>
+              <iframe 
+                src={keywordUrl}
+                className='w-100'
+                style={{minHeight: '1000px'}}
+              ></iframe>
+            </div>
+          </CCard>
+        </CAccordionBody>
+      </CAccordionItem>
 
-      {/* 네이버 아이디 모달 */}
+        {/* 네이버 아이디 모달 */}
       <CModal
         visible={showModal}
         onClose={() => setShowModal(false)}
@@ -403,7 +452,8 @@ const Home = () => {
           <CButton color="primary" onClick={() => setNaverId()}>확인</CButton>
         </CModalFooter>
       </CModal>
-    </>
+    </CAccordion>
+  </>
   )
 }
 
