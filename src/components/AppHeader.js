@@ -58,13 +58,8 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink to="/selling-site" as={NavLink}>
-              도매처사이트
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink to="/nas" as={NavLink}>
-              NAS
+            <CNavLink to="/setting" as={NavLink}>
+              설정
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

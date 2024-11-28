@@ -1,12 +1,12 @@
 import React from 'react'
 
 const Home = React.lazy(() => import('./views/home/Home'))
-const SellingSite = React.lazy(() => import('./views/sellingSite/SellingSite'))
+const Setting = React.lazy(() => import('./views/setting/Setting'))
 const Nas = React.lazy(() => import('./views/nas/Nas'))
 
 const routes = [
   { path: '/', exact: true, name: '메인', element: Home },
-  { path: '/selling-site', exact: true, name: '도매처사이트', element: SellingSite },
+  { path: '/setting', exact: true, name: '설정', element: Setting },
   { path: '/nas', exact: true, name: 'NAS', element: Nas },
 ]
 
