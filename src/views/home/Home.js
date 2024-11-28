@@ -237,6 +237,7 @@ const Home = () => {
                 type="text" size="sm" 
                 placeholder="키워드 입력" 
                 onClick={(e) => e.stopPropagation()} 
+                onKeyUp={(e) => e.preventDefault()}
                 onKeyDown={(e) => {
                   if(e.key === "Enter") {
                     getPopularCate(e);
