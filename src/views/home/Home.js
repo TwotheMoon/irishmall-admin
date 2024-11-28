@@ -7,8 +7,6 @@ import {
   CAlert,
   CButton,
   CCard,
-  CCardBody,
-  CCardHeader,
   CForm,
   CFormInput,
   CFormLabel,
@@ -21,11 +19,10 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
-import { apiServerBaseUrl, getAllCateApiEP, getPopularCateApiEP, getTokenApiEP, healthCkEP, localServerBaseUrl } from '../../api';
+import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
 import axios from 'axios';
-import { getPopularCategories } from '../../utils';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { allCateAtom, isLocalAtom, tokenAtom } from '../../atom';
+import { useRecoilValue } from 'recoil';
+import { isLocalAtom } from '../../atom';
 
 const Home = () => {
   const txArea1Ref = useRef();
@@ -46,8 +43,6 @@ const Home = () => {
   let newNaverId;
 
   const isLocal = useRecoilValue(isLocalAtom);
-  const [accessToken, setAccessToken] = useRecoilState(tokenAtom);
-  const [allCate, setAllCate] = useRecoilState(allCateAtom);  
 
   // 키워드 변환 정규식
   const conversion = () => {
@@ -146,85 +141,28 @@ const Home = () => {
   };
 
   // 상품 카테고리코드 조회
-  const getCateNm = async (keyword) => {
+  const getPopularCate = async (e) => {
+    e.stopPropagation();
     resetPopularCateRef()
+    
+    const keyword = searchInputRef.current.value;
+    
     if(!keyword) return;
 
     try {
-        const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
+        const { data } = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
         data: keyword
       });
 
-      const productsArr = res.data.items;
-      const popularCate = getPopularCategories(productsArr);
+      for(let i = 0; i <= data.length; i++){
+        topNCateNameRefs[i].current.value = data[i].wholeCategoryName;
+        topNCateIdRefs[i].current.value = data[i].id;
+      };
 
-      for(let i = 0; i <= popularCate.length; i++){
-        if(popularCate[i] != false){
-          let findedCateId = allCate.filter(item => item.wholeCategoryName.includes(popularCate[i]))[0].id;
-
-          topNCateNameRefs[i].current.value = popularCate[i];
-          topNCateIdRefs[i].current.value = findedCateId;
-        } else {
-          topNCateNameRefs[i].current.value = "";
-          topNCateIdRefs[i].current.value = "";
-        }
-      }
     } catch (error) {
       console.log(error)
     }
   };
-
-  // 서버 상태 확인
-  const serverHealthCk = async () => {
-    try {
-      const res = await axios.get(`${ isLocal ? localServerBaseUrl : apiServerBaseUrl }${healthCkEP}`);
-      return res.data.status;
-    } catch (error) {}
-  }
-
-  // OAth 인증토큰 발급
-  const getTokenApi = async () => {
-    try {
-      const res = await axios.post(`${ isLocal ? localServerBaseUrl : apiServerBaseUrl }${getTokenApiEP}`);
-      console.log(res.data.access_token);
-      setAccessToken(res.data.access_token);
-      
-      return res.data.access_token;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // 전체 카테고리 호출
-  const getAllCate = async (firstAccessToken) => {
-    let token;
-    if(!accessToken && !firstAccessToken) {
-      await getTokenApi();
-      return await getAllCate(true);
-    } else if(accessToken && !firstAccessToken){
-      token = accessToken;
-    } else if (!accessToken && firstAccessToken){
-      token = firstAccessToken;
-    }
-
-    try {
-      const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl }${getAllCateApiEP}`,{
-          data: token
-      });
-
-      console.log("allCate", res.data);
-      setAllCate(res.data);
-    } catch (error) {
-        console.log(error);      
-    }
-  };
-
-  // 상위 키워드 검색
-  const getPopularCate = (e) => {
-      e.stopPropagation();
-      const keyword = searchInputRef.current.value;
-      getCateNm(keyword);
-    };
 
   const showCateCopyAlert = (ref) => {
     try {
@@ -268,26 +206,21 @@ const Home = () => {
     }
   });
 
-  // 최초 토큰 발급, 전체 카테고리 저장
-  useEffect(() => {
-    const getData = async () => {
-      await getTokenApi().then( async (res) => {
-        await getAllCate(res)
-      })
-    };
-    
-    // 서버 상태확인
-    (async () => {
-      await serverHealthCk().then((status) => {
-        if(status){
-          console.log("Server is running :)")
-           getData();
-        } else {
-          console.log("Server has problem :(")
-        }
-      })
-    })();
-  }, []);  
+  // useEffect(() => {
+  //   const getData = async () => {}   
+ 
+  //   // 서버 상태확인
+  //   (async () => {
+  //     await serverHealthCk().then((status) => {
+  //       if(status){
+  //         console.log("Server is running :)")
+  //          getData();
+  //       } else {
+  //         console.log("Server has problem :(")
+  //       }
+  //     })
+  //   })();
+  // }, []);  
 
   return (
     <>
@@ -379,7 +312,7 @@ const Home = () => {
             <div className="mb-3 w-100">
               <CFormLabel htmlFor="textArea1">
                 키워드 입력 &nbsp; 
-                <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton> 
+                <CButton color="primary" onClick={() => checkDuplicate()}>중복 키워드 제거</CButton>
               </CFormLabel>
               <CFormTextarea 
                 id="textArea1" 
@@ -387,9 +320,6 @@ const Home = () => {
                 style={{minHeight: txBoxSize, height: 'auto', resize:"none"}} 
               >  
               </CFormTextarea>
-              <div>
-                {/* {highlightDuplicates(txArea1Ref.current.value)} */}
-              </div>
             </div>
               <div className='px-3 d-flex flex-column gap-4'>
                 <CButton as="input" type="button" color="primary" value="변환" onClick={conversion} />
