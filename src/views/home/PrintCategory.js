@@ -66,14 +66,13 @@ const PrintCategory = ({idx, props }) => {
         </div>
         {matchingCate?.map((data, idx) => {
           return(
-            <>
+            <React.Fragment key={`${matchingCate.naverCate}${idx}`}>
               <PrintMyCategory 
-                key={matchingCate?.naverCate}
                 idx={idx}
                 props={data}
                 >
               </PrintMyCategory>
-            </>
+            </React.Fragment>
           )
         })}
       </div>

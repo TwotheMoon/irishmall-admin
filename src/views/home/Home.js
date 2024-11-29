@@ -237,14 +237,13 @@ const Home = () => {
           {searchCateData && searchCateData.length > 0 ?
             searchCateData.map((data, idx) => {
               return(
-                <>
+                <React.Fragment key={`${data.id}${idx}`}>
                   <PrintCategory
-                    key={data.id}
                     idx={idx}
                     props={data} 
                     >
                   </PrintCategory>
-                </>
+                </React.Fragment>
               )
             })
             :
