@@ -21,25 +21,26 @@ import {
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
 import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
 import axios from 'axios';
-import { useRecoilValue } from 'recoil';
-import { isLocalAtom } from '../../atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { copyAlertAtom, isLocalAtom } from '../../atom';
+import PrintCategory from './PrintCategory';
 
 const Home = () => {
   const txArea1Ref = useRef();
   const txArea2Ref = useRef();
   const loginInputRef = useRef();
   const searchInputRef = useRef();
-  const topNCateNameRefs = Array.from({ length: 3 }, () => useRef(null));
-  const topNCateIdRefs = Array.from({ length: 3 }, () => useRef(null));
 
   const [txBoxSize] = useState(200);
   const [showAlert, setShowAlert] = useState(false);
-  const [showCateCopy, setShowCateCopy] = useState(false);
   const [showDupAlert, setShowDupAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [keywordUrl, setKeywordUrl] = useState();
   const [duplicateWordCount, setDuplicateWordCount] = useState(0);
   const [duplicateState, setDuplicateState] = useState(false);
+  const [searchCateData, setSearchCateData] = useState();
+  const [copyAlert, setCopyAlert] = useRecoilState(copyAlertAtom);
+  const [inputInit, setInputInit] = useState();
   let newNaverId;
 
   const isLocal = useRecoilValue(isLocalAtom);
@@ -76,16 +77,6 @@ const Home = () => {
     txArea1Ref.current.value = "";
     txArea2Ref.current.value = "";
   };
-
-  // 카테고리 찾기 초기화
-  const resetPopularCateRef = () => {
-    topNCateNameRefs.forEach((ref) => {
-      ref.current.value = "";
-    });
-    topNCateIdRefs.forEach((ref) => {
-      ref.current.value = "";
-    });
-  }
 
   // 키워드 중복 검사
   const checkDuplicate = () => {
@@ -143,44 +134,25 @@ const Home = () => {
   // 상품 카테고리코드 조회
   const getPopularCate = async (e) => {
     e.stopPropagation();
-    resetPopularCateRef()
     
     const keyword = searchInputRef.current.value;
-    
-    if(!keyword) return;
+
+    if(!keyword) {
+      setSearchCateData("");
+      return;
+    }
 
     try {
         const { data } = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
         data: keyword
       });
-
-      for(let i = 0; i <= data.length; i++){
-        topNCateNameRefs[i].current.value = data[i].wholeCategoryName;
-        topNCateIdRefs[i].current.value = data[i].id;
-      };
+      setSearchCateData(data);
 
     } catch (error) {
       console.log(error)
     }
   };
 
-  const showCateCopyAlert = (ref) => {
-    try {
-      if (ref.current && ref.current.value !== "") {
-        ref.current.select();
-        
-        document.execCommand('copy');
-        
-        setShowCateCopy(true);
-        setTimeout(() => {
-          setShowCateCopy(false);
-        }, 1500);
-      }
-      
-    } catch (error) {
-      console.log(error);      
-    }
-  }
 
   // 네이버 광고 아이디 입력
   const setNaverId = () => {
@@ -206,24 +178,19 @@ const Home = () => {
     }
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {}   
- 
-  //   // 서버 상태확인
-  //   (async () => {
-  //     await serverHealthCk().then((status) => {
-  //       if(status){
-  //         console.log("Server is running :)")
-  //          getData();
-  //       } else {
-  //         console.log("Server has problem :(")
-  //       }
-  //     })
-  //   })();
-  // }, []);  
 
   return (
-    <>
+  <div className='position-relative'>
+    <CAlert 
+      color="primary"
+      className='position-fixed'
+      style={{top: "120px", left:"50%", zIndex: 9999}}
+      dismissible 
+      visible={copyAlert} 
+      onClose={() => setCopyAlert(false)}
+      >
+        복사되었습니다.
+    </CAlert>
     <CAccordion alwaysOpen activeItemKey={1}>
       {/* 카테고리 찾기 */}
       <CAccordionItem itemKey={1} className='mb-4'>
@@ -253,32 +220,26 @@ const Home = () => {
                 onClick={(e) => getPopularCate(e)} 
               />
             </div>
-            <CAlert 
-              color="primary"
-              className='position-absolute end-0'
-              style={{top: "-70px", zIndex: 9999}}
-              dismissible 
-              visible={showCateCopy} 
-              onClose={() => setShowCateCopy(false)}
-              >
-                복사되었습니다.
-            </CAlert>
           </div>
        </CAccordionHeader>
        <CAccordionBody>
         <div>
-          <div className='d-flex w-100 gap-3 mb-2'>
-            <CFormInput ref={topNCateNameRefs[0]} type="text" size="sm" placeholder="상위노출 카테고리 1" readOnly />
-            <CFormInput ref={topNCateIdRefs[0]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[0], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
-          </div>
-          <div className='d-flex w-100 gap-3 mb-2'>
-            <CFormInput ref={topNCateNameRefs[1]} type="text" size="sm" placeholder="상위노출 카테고리 2" readOnly />
-            <CFormInput ref={topNCateIdRefs[1]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[1], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center" }} className='bg-secondary' type="text" size="sm" readOnly />
-          </div>
-          <div className='d-flex w-100 gap-3'>
-            <CFormInput ref={topNCateNameRefs[2]} type="text" size="sm" placeholder="상위노출 카테고리 3" readOnly />
-            <CFormInput ref={topNCateIdRefs[2]} onClick={(e) => showCateCopyAlert(topNCateIdRefs[2], e)} style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} className='bg-secondary' type="text" size="sm" readOnly />
-          </div>
+          {searchCateData && searchCateData.length > 0 ?
+            searchCateData.map((data, idx) => {
+              return(
+                <>
+                  <PrintCategory
+                    key={data.id}
+                    idx={idx}
+                    props={data} 
+                    >
+                  </PrintCategory>
+                </>
+              )
+            })
+            :
+            <div className='w-100m text-center'>키워드를 입력해주세요.</div>
+          }
         </div>
        </CAccordionBody>
       </CAccordionItem>
@@ -384,7 +345,7 @@ const Home = () => {
         </CModalFooter>
       </CModal>
     </CAccordion>
-  </>
+  </div>
   )
 }
 

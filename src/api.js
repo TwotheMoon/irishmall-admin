@@ -6,5 +6,5 @@ export const healthCkEP = "/health";
 export const getTokenApiEP = "/getToken";
 export const updateNaverAllCateApiEP = "/updateNaverAllCate";
 export const getPopularCateApiEP = "/getPopularCate";
-
+export const uploadMyCateExcelApiEP = "/uploadMyCateExcel"
 

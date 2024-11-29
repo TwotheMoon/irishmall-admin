@@ -15,11 +15,38 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { useDropzone } from "react-dropzone";
+import axios from 'axios';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoadingAtom, isLocalAtom } from '../../atom';
+import { apiServerBaseUrl, localServerBaseUrl, uploadMyCateExcelApiEP } from '../../api';
 
 const Setting = () => {
-  const onDrop = (acceptedFiles) => {
+  const isLocal = useRecoilValue(isLocalAtom);
+  const setIsLoading = useSetRecoilState(isLoadingAtom);
+
+  const onDrop = async (acceptedFiles) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
+
+    try {
+      const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${uploadMyCateExcelApiEP}`, 
+        formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        }
+      );
+      
+      console.log(res.data);
+      if(res.data.result){
+        alert("성공적으로 업로드 되었습니다.");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error); 
+      setIsLoading(false);     
+    }
   }
 
   const { acceptedFiles, getRootProps, getInputProps, isDragActive  } = useDropzone({
@@ -35,7 +62,7 @@ const Setting = () => {
   ));
 
   return (
-    <>
+    <div>
       <CAccordion alwaysOpen activeItemKey={1}>
         <CAccordionItem itemKey={1} className='mb-4'>
           <CAccordionHeader className='w-100 position-relative'>
@@ -120,7 +147,7 @@ const Setting = () => {
           </CAccordionBody>
         </CAccordionItem>
      </CAccordion>
-    </>
+    </div>
   )
 }
 

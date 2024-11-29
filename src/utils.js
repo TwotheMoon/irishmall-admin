@@ -30,3 +30,16 @@ export const getPopularCategories = (items, topN = 3) => {
 
   return sortedCategories.map(([category]) => category);
 }
+
+// 카피
+export const handleCopy = (ref) => {
+  try {
+    if (ref.current && ref.current.value !== "") {
+      ref.current.select();
+      document.execCommand('copy');
+    }
+    
+  } catch (error) {
+    console.log(error);      
+  }
+}
