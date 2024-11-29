@@ -17,6 +17,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CSpinner,
 } from '@coreui/react'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
 import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
@@ -40,7 +41,7 @@ const Home = () => {
   const [duplicateState, setDuplicateState] = useState(false);
   const [searchCateData, setSearchCateData] = useState();
   const [copyAlert, setCopyAlert] = useRecoilState(copyAlertAtom);
-  const [inputInit, setInputInit] = useState();
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
   let newNaverId;
 
   const isLocal = useRecoilValue(isLocalAtom);
@@ -134,11 +135,13 @@ const Home = () => {
   // 상품 카테고리코드 조회
   const getPopularCate = async (e) => {
     e.stopPropagation();
+    setIsSearchLoading(true);
     
     const keyword = searchInputRef.current.value;
 
     if(!keyword) {
       setSearchCateData("");
+      setIsSearchLoading(false);
       return;
     }
 
@@ -147,9 +150,11 @@ const Home = () => {
         data: keyword
       });
       setSearchCateData(data);
+      setIsSearchLoading(false);
 
     } catch (error) {
-      console.log(error)
+      setIsSearchLoading(false);
+      console.log(error);
     }
   };
 
@@ -197,7 +202,12 @@ const Home = () => {
         <CAccordionHeader className='w-100'>
           <div className='position-relative d-flex justify-content-between w-100'>
             카테고리 찾기
-            <div className='d-flex w-100 gap-3' style={{maxWidth: "400px"}}>
+            <div className='d-flex w-100 gap-3' style={{maxWidth: "400px", alignItems:"center", justifyContent:"center"}}>
+              {isSearchLoading ? 
+                <CSpinner color="primary" style={{minWidth: "20px", minHeight: "20px", maxWidth: "20px", maxHeight: "20px"}} />
+                :
+                <div style={{width:"33px"}}></div>
+              }
               <CFormInput 
                 ref={searchInputRef} 
                 style={{zIndex: 9999}} 
