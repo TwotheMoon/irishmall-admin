@@ -9,6 +9,7 @@ import {
   CCardHeader } from '@coreui/react'
 import { 
   _79domeUrl,
+  cloudTypeServerUrl,
   coreUiFreeviewUrl,
   dometopiaUrl,
   gabiaUrl,
@@ -96,7 +97,7 @@ import {
             </CCardHeader>
             <CCardBody className='d-flex gap-3'>
               <CButton color="success" variant="outline" onClick={() => onClickLinkBtn(netlifyServer)}>프론트엔드 서버</CButton> 
-              <CButton color="warning" variant="outline" onClick={() => onClickLinkBtn(netlifyServer)}>백엔드 서버</CButton> 
+              <CButton color="warning" variant="outline" onClick={() => onClickLinkBtn(cloudTypeServerUrl)}>백엔드 서버</CButton> 
               <CButton color="info" variant="outline" onClick={() => onClickLinkBtn(mongoExpressUrl)}>데이터베이스</CButton> 
               <CButton color="secondary" variant="outline" onClick={() => onClickLinkBtn(nasMonitor)}>Nas Monitor</CButton> 
               <CButton color="secondary" variant="outline" onClick={() => onClickLinkBtn(gabiaUrl)}>가비아 도메인</CButton> 
