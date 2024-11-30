@@ -1,0 +1,12 @@
+.simplebar-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+[data-simplebar="init"] {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+

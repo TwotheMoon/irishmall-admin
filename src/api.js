@@ -1,3 +1,6 @@
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 // api 서버 url
 export const apiServerBaseUrl = "https://port-0-irishmall-api-server-m3u68qma5d734195.sel4.cloudtype.app";
@@ -36,4 +39,4 @@ export const nasMonitor = "http://125.133.33.2:3033/d/TIcL1_ezk22/synology-dashb
 export const gabiaUrl = "https://www.gabia.com/";
 export const naverCommerceDocUrl = "https://apicenter.commerce.naver.com/ko/basic/commerce-api";
 export const naverOpenApiDocUrl = "https://developers.naver.com/products/service-api/datalab/datalab.md";
-export const coreUiFreeviewUrl = "https://coreui.io/demos/react/5.0/free/?theme=dark#/dashboard";
+export const coreUiFreeviewUrl = "https://coreui.io/demos/react/5.3/default/?theme=dark#/dashboard";

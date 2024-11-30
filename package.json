@@ -1,51 +1,67 @@
 {
   "name": "moondashboard",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "irishmall dashboard",
+  "config": {
+    "theme": "dark",
+    "zipPrefix": ".zip/coreui-pro-react-admin-template-theme",
+    "bundler": "vite"
+  },
   "homepage": "https://moondashboard.netlify.app/",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coreui/coreui-pro-react-admin-template.git"
+  },
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",
     "serve": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "zip": "git archive -o $npm_package_config_zipPrefix-$npm_package_config_theme-$npm_package_config_bundler-v$npm_package_version.zip -9 HEAD"
   },
   "dependencies": {
     "@coreui/chartjs": "^4.0.0",
-    "@coreui/coreui": "^5.1.2",
+    "@coreui/coreui-pro": "^5.7.1",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "^2.3.0",
-    "@coreui/react": "^5.4.0",
     "@coreui/react-chartjs": "^3.0.0",
+    "@coreui/react-pro": "^5.9.2",
     "@coreui/utils": "^2.0.2",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
     "@popperjs/core": "^2.11.8",
-    "axios": "^1.7.7",
-    "chart.js": "^4.4.4",
+    "@react-google-maps/api": "^2.20.3",
+    "axios": "^1.7.8",
+    "chart.js": "^4.4.6",
     "classnames": "^2.5.1",
-    "core-js": "^3.38.1",
-    "netlify-cli": "^17.37.2",
+    "core-js": "^3.39.0",
     "prop-types": "^15.8.1",
     "qs": "^6.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.5",
+    "react-i18next": "^15.1.1",
     "react-redux": "^9.1.2",
-    "react-router-dom": "^6.26.2",
+    "react-router-dom": "^6.28.0",
     "recoil": "^0.7.7",
     "redux": "5.0.1",
     "simplebar-react": "^3.2.6"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.49",
     "prettier": "3.3.3",
-    "sass": "^1.79.3",
-    "vite": "^5.4.8"
+    "sass": "^1.81.0",
+    "vite": "^5.4.11"
   }
 }

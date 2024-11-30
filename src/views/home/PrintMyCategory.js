@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef } from 'react'
-import { CFormInput } from "@coreui/react"
+import { CFormInput } from "@coreui/react-pro"
 import { copyAlertAtom } from '../../atom';
 import { handleCopy } from '../../utils';
 import { useSetRecoilState } from 'recoil';

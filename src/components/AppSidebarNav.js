@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 
-import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
+import { CBadge, CNavLink, CSidebarNav } from '@coreui/react-pro'
 
 export const AppSidebarNav = ({ items }) => {
   const navLink = (name, icon, badge, indent = false) => {

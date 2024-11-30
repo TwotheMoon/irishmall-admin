@@ -13,26 +13,26 @@ import {
   CNavLink,
   CNavItem,
   useColorModes,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import {
-  cilBell,
   cilContrast,
-  cilEnvelopeOpen,
-  cilList,
+  cilApplicationsSettings,
   cilMenu,
   cilMoon,
   cilSun,
 } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
+
 import { AppHeaderDropdown } from './header/index'
 
 const AppHeader = () => {
   const headerRef = useRef()
-  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+  const { colorMode, setColorMode } = useColorModes('coreui-pro-react-admin-template-theme-default')
 
   const dispatch = useDispatch()
+  const asideShow = useSelector((state) => state.asideShow)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   useEffect(() => {
@@ -63,24 +63,9 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav className="ms-auto">
-          <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilBell} size="lg" />
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilList} size="lg" />
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilEnvelopeOpen} size="lg" />
-            </CNavLink>
-          </CNavItem>
+        <CHeaderNav className="d-none d-md-flex ms-auto">
         </CHeaderNav>
-        <CHeaderNav>
+        <CHeaderNav className="ms-auto ms-md-0">
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>
@@ -102,7 +87,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('light')}
               >
-                <CIcon className="me-2" icon={cilSun} size="lg" /> Light
+                <CIcon className="me-2" icon={cilSun} size="lg" /> light
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'dark'}
@@ -111,7 +96,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('dark')}
               >
-                <CIcon className="me-2" icon={cilMoon} size="lg" /> Dark
+                <CIcon className="me-2" icon={cilMoon} size="lg" /> dark
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'auto'}
@@ -129,6 +114,12 @@ const AppHeader = () => {
           </li>
           <AppHeaderDropdown />
         </CHeaderNav>
+        <CHeaderToggler
+          onClick={() => dispatch({ type: 'set', asideShow: !asideShow })}
+          style={{ marginInlineEnd: '-12px' }}
+        >
+          <CIcon icon={cilApplicationsSettings} size="lg" />
+        </CHeaderToggler>
       </CContainer>
       <CContainer className="px-4" fluid>
         <AppBreadcrumb />

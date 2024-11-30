@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import { cilCode, cilMediaPlay } from '@coreui/icons'
 

@@ -3,7 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RecoilRoot } from 'recoil'
 
-import { CSpinner, useColorModes } from '@coreui/react'
+import { CSpinner, useColorModes } from '@coreui/react-pro'
 import './scss/style.scss'
 
 // Containers
@@ -35,8 +35,8 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      <HashRouter basename={process.env.PUBLIC_URL}>
-      {/* <HashRouter> */}
+      {/* <HashRouter basename={process.env.PUBLIC_URL}> */}
+      <HashRouter>
         <Suspense
           fallback={
             <div className="pt-3 text-center">

@@ -2,11 +2,12 @@
 @import "variables";
 
 // Import styles
-@import "@coreui/coreui/scss/coreui";
+@import "@coreui/coreui-pro/scss/coreui";
 @import "@coreui/chartjs/scss/coreui-chartjs";
 
 // Vendors
-@import "vendors/simplebar";
+@import "vendors/calendar";
+@import "vendors/_simplebar";
 
 // Custom styles for this theme
 @import "theme";

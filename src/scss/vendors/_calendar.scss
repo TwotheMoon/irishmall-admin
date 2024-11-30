@@ -1,0 +1,18 @@
+:root {
+  --fc-border-color: #{var(--cui-border-color)};
+}
+
+.fc .fc-button {
+  @extend .btn;
+}
+
+.fc .fc-button-primary {
+  @extend .btn-primary;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  color: var(--cui-btn-active-color);
+  background-color: var(--cui-btn-active-bg);
+  border-color: var(--cui-btn-active-border-color);
+}

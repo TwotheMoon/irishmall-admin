@@ -18,7 +18,7 @@ import {
   CModalHeader,
   CModalTitle,
   CSpinner,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import naverIdImgPath from '../../assets/images/naverIdImg.png';
 import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
 import axios from 'axios';

@@ -1,20 +1,13 @@
 import React from 'react'
 import axios from 'axios';
 import {
-  CAccordion,
   CAccordionBody,
   CAccordionHeader,
   CAccordionItem,
   CCard,
   CCardBody,
   CCardHeader,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import { useDropzone } from "react-dropzone";
 import { apiServerBaseUrl, localServerBaseUrl, uploadMyCateExcelApiEP } from '../../api';
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -51,7 +44,10 @@ const CateSetting = () => {
 
   const { acceptedFiles, getRootProps, getInputProps, isDragActive  } = useDropzone({
     onDrop,
-    accept: ".xlsx, .xls",
+    accept: {
+      "application/vnd.ms-excel": [".xls"],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
+    },
     multiple: false,
   });
 

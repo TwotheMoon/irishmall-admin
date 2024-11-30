@@ -3,8 +3,9 @@ import CIcon from '@coreui/icons-react'
 import {
   cilCog,
   cilHome,
+  cilCode
 } from '@coreui/icons'
-import { CNavItem, CNavTitle } from '@coreui/react'
+import { CNavItem, CNavTitle } from '@coreui/react-pro'
 
 const _nav = [
   {
@@ -22,6 +23,12 @@ const _nav = [
     name: '설정',
     to: '/setting',
     icon: <CIcon icon={cilCog} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: '개발자설정',
+    to: '/devSetting',
+    icon: <CIcon icon={cilCode} customClassName="nav-icon" />,
   },
 ]
 

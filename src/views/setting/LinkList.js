@@ -6,7 +6,7 @@ import {
   CButton, 
   CCard, 
   CCardBody, 
-  CCardHeader } from '@coreui/react'
+  CCardHeader } from '@coreui/react-pro'
 import { 
   _79domeUrl,
   cloudTypeServerUrl,

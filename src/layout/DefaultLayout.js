@@ -2,7 +2,7 @@ import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import { useRecoilValue } from 'recoil'
 import { isLoadingAtom } from '../atom'
-import { CSpinner } from '@coreui/react'
+import { CSpinner } from '@coreui/react-pro'
 
 const DefaultLayout = () => {
   const isLoading = useRecoilValue(isLoadingAtom);
