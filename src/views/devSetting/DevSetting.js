@@ -1,6 +1,6 @@
 import React from "react"
 import { CAccordion } from "@coreui/react-pro"
-import WhiteList from "./whiteList"
+import WhiteList from "./WhiteList"
 
 const DevSetting = () => {
 
