@@ -7,9 +7,17 @@ export const apiServerBaseUrl = "https://port-0-irishmall-api-server-m3u68qma5d7
 export const localServerBaseUrl = "http://localhost:4000";
 export const healthCkEP = "/health";
 export const getTokenApiEP = "/getToken";
+
+// 
 export const updateNaverAllCateApiEP = "/updateNaverAllCate";
 export const getPopularCateApiEP = "/getPopularCate";
 export const uploadMyCateExcelApiEP = "/uploadMyCateExcel"
+
+// 화이트리스트 url
+export const createWhiteListApiEp = "/createWitelist"
+export const readWhiteListApiEp = "/readeWitelist"
+export const updateWhiteListApiEp = "/updateWitelist"
+export const deleteWhiteListApiEp = "/deleteWitelist"
 
 
 // 네이버 & 스토어 url

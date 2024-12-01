@@ -1,8 +1,8 @@
 import React from 'react'
 
 const Home = React.lazy(() => import('./views/home/Home'))
-const Setting = React.lazy(() => import('./views/setting/Setting'))
-const DevSetting = React.lazy(() => import('./views/devSetting/DevSetting'))
+const Setting = React.lazy(() => import('./views/setting/index'))
+const DevSetting = React.lazy(() => import('./views/devSetting/index'))
 
 const routes = [
   { path: '/', exact: true, name: '메인', element: Home },

@@ -136,7 +136,8 @@ const Home = () => {
   const getPopularCate = async (e) => {
     e.stopPropagation();
     setIsSearchLoading(true);
-    
+    setSearchCateData("");
+
     const keyword = searchInputRef.current.value;
 
     if(!keyword) {

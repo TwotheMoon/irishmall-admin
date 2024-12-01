@@ -1,35 +1,3 @@
-// 카테고리 배열 문자 포멧 전환
-export const formatCategory = (data) => {
-  const categories = [
-    data.category1 || "",
-    data.category2 || "",
-    data.category3 || "",
-    data.category4 || "",
-  ];
-
-  const nonEmptyCategories = categories.filter(category => category);
-  return nonEmptyCategories.join('>');
-}
-
-// 인기 카테고리 3개 선택
-export const getPopularCategories = (items, topN = 3) => {
-  const categoryCounts = {};
-
-  items.forEach(item => {
-    const formatted = formatCategory(item);
-    categoryCounts[formatted] = (categoryCounts[formatted] || 0) + 1;
-  });
-
-  const sortedCategories = Object.entries(categoryCounts)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, topN);
-
-  while (sortedCategories.length < topN){
-    sortedCategories.push([false, 0]);
-  }
-
-  return sortedCategories.map(([category]) => category);
-}
 
 // 카피
 export const handleCopy = (ref) => {
@@ -42,4 +10,57 @@ export const handleCopy = (ref) => {
   } catch (error) {
     console.log(error);      
   }
+}
+
+// 공통 모달 (api 리퀘스트)
+export const commonReqModal = (type="default", title, desc="", setShowModal=()=>{}, onClick=()=>{}) => {
+  setShowModal({
+    type,
+    visible: true,
+    title,
+    desc,
+    onClick,
+    isCancelVisible: true,
+  })
+};
+
+// 공통 모달 (api 리스폰스)
+export const commonResModal = (res, title, setIsLoading=()=>{}, setShowModal=()=>{}) => {
+  if(res.data.status === 200 || res.data.status === 500){
+    setIsLoading(false);
+
+    setShowModal({
+      type: "default",
+      visible: true,
+      title,
+      desc: res.data.message,
+      onClick: () => {commonCloseModal(setShowModal)},
+      isCancelVisible: false,
+    })
+  }
+};
+
+// 공통 모달 (Close 시 초기화용)
+export const commonCloseModal = (setShowModal) => {
+  setShowModal({
+    type: "default",
+    visible: false,
+    title: "",
+    desc: "",
+    onClick: () => {},
+    isCancelVisible: false
+  })
+};
+
+export const commonErrorModal = (setIsLoading, setShowModal, error) => {
+  setIsLoading(false);
+  
+  setShowModal({
+    type: "error",
+    visible: true,
+    title: "오류가 발생했습니다.",
+    desc: error?.message || "관리자에게 문의해주세요.",
+    onClick: () => {commonCloseModal(setShowModal)},
+    isCancelVisible: false
+  })
 }

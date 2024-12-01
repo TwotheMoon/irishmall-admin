@@ -4,19 +4,15 @@ import {
   CAccordionBody,
   CAccordionHeader, 
   CAccordionItem, 
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle} from '@coreui/react-pro'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+  CButton} from '@coreui/react-pro'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom'
 import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../api'
+import { commonErrorModal, commonReqModal, commonResModal } from '../../utils'
 
 
 const DevSetting = () => {
-  const [showModal, setShowModal] = useRecoilState(showModalAtom);
+  const setShowModal = useSetRecoilState(showModalAtom);
   const isLocal = useRecoilValue(isLocalAtom);
   const setIsLoading = useSetRecoilState(isLoadingAtom);
 
@@ -24,63 +20,15 @@ const DevSetting = () => {
     setIsLoading(true);
     try {
       const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${updateNaverAllCateApiEP}`);
-      if(res.data.status === 200){
-        setIsLoading(false);
-
-        setShowModal({
-          visible: true,
-          title: "네이버 카테고리 업데이트",
-          desc: res.data.message,
-          confirm: "확인",
-          cancle: "",
-          onClick: () => {
-            setShowModal({
-              visible: false,
-              title: "",
-              desc: "",
-              confirm: "",
-              cancle: "",
-              onClick: () => {},
-              isCancelVisible: true
-            })
-          },
-          isCancelVisible: false
-        })
-      } else if (res.data.status === 500){
-          setIsLoading(false);
-
-          setShowModal({
-            visible: true,
-            title: "네이버 카테고리 업데이트",
-            desc: res.data.message,
-            confirm: "확인",
-            cancle: "",
-            onClick: () => {
-              setShowModal({
-                visible: false,
-                title: "",
-                desc: "",
-                confirm: "",
-                cancle: "",
-                onClick: () => {},
-                isCancelVisible: true
-              })
-            },
-            isCancelVisible: false
-          })
-        }
+      commonResModal(
+        res,
+        "네이버 카테고리 업데이트",
+        setIsLoading,
+        setShowModal
+      )
+      
     } catch (error) {
-      alert("관리자에게 문의해주세요.");
-      setIsLoading(false);
-      setShowModal({
-        visible: false,
-        title: "",
-        desc: "",
-        confirm: "",
-        cancle: "",
-        onClick: () => {},
-        isCancelVisible: true
-      })
+      commonErrorModal(setIsLoading, setShowModal, error);
     }
   };
 
@@ -92,57 +40,14 @@ const DevSetting = () => {
           <CButton 
             color="danger" 
             onClick={() => 
-              setShowModal({
-                visible: true,
-                title: "네이버 카테고리 업데이트",
-                desc: "최신 네이버 카테고리를 불러오시겠습니까?",
-                confirm: "실행",
-                cancle: "취소",
-                onClick: () => {updateNaverCate()},
-                isCancelVisible: true,
-              })
+              commonReqModal(
+                "default",
+                "네이버 카테고리 업데이트",
+                "네이버 카테고리를 업데이트 하시겠습니까?",
+                setShowModal,
+                updateNaverCate
+              )
             }>네이버 카테고리 업데이트</CButton> 
-          <CModal
-            alignment="center"
-            visible={showModal.visible}
-            onClose={() => 
-              setShowModal({
-                visible: false,
-                title: "",
-                desc: "",
-                confirm: "",
-                cancle: "",
-                onClick: () => {},
-                isCancelVisible: true
-              })
-            }
-            aria-labelledby="VerticallyCenteredExample"
-          >
-            <CModalHeader>
-              <CModalTitle id="VerticallyCenteredExample">{showModal?.title}</CModalTitle>
-            </CModalHeader>
-            <CModalBody>{showModal?.desc}</CModalBody>
-            <CModalFooter>
-              {showModal.isCancelVisible ?
-                <CButton color="secondary" onClick={() => 
-                  setShowModal({
-                    visible: false,
-                    title: "",
-                    desc: "",
-                    confirm: "",
-                    cancle: "",
-                    onClick: () => {},
-                    isCancelVisible: true,
-                  })
-                }>
-                  {showModal.cancle}
-                </CButton>
-                :
-                null
-              }
-              <CButton color="primary" onClick={showModal.onClick}>{showModal.confirm}</CButton>
-            </CModalFooter>
-          </CModal>
         </CAccordionBody>
       </CAccordionItem>
     </>
