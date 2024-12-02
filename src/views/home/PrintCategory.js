@@ -48,13 +48,26 @@ const PrintCategory = ({idx, props }) => {
         <div style={{minWidth: "150px", textAlign: "center"}}>네이버 카테고리</div>
       </div>
       <div className='d-flex w-100 gap-3 mb-2'>
-          <CFormInput ref={cateNameRef} type="text" size="sm" readOnly />
+          <CFormInput 
+            ref={cateNameRef} 
+            type="text" 
+            size="sm" 
+            style={{
+              borderColor: "#323a49",
+              transition: "border-color 0.15s ease--in-out",
+            }}
+            readOnly 
+          />
           <CFormInput 
             ref={naverCateRef} 
-            onClick={() => {
+            onFocus={() => {
               handleCopy(naverCateRef)
               handleCopyAlert();
-            }} 
+              cateNameRef.current.style.borderColor = "#6261cc";
+            }}
+            onBlur={() => {
+              cateNameRef.current.style.borderColor = "#323a49";
+            }}
             style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} 
             className='bg-secondary' type="text" size="sm" readOnly 
             />

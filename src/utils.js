@@ -4,7 +4,7 @@ export const handleCopy = (ref) => {
   try {
     if (ref.current && ref.current.value !== "") {
       ref.current.select();
-      document.execCommand('copy');
+      navigator.clipboard.writeText(ref.current.value);
     }
     
   } catch (error) {

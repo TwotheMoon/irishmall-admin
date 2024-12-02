@@ -39,14 +39,27 @@ const PrintMyCategory = ({idx, props}) => {
       <div className='d-flex w-100 gap-3 mb-2'>
         <div style={{width: "30px"}}></div>
         <div>{idx + 1}.</div>
-        <CFormInput ref={myCateNameRef} type="text" size="sm" readOnly />
+        <CFormInput 
+          ref={myCateNameRef} 
+          type="text" 
+          size="sm" 
+          style={{
+            borderColor: "#323a49",
+            transition: "border-color 0.15s ease--in-out",
+          }}
+          readOnly 
+        />
         <CFormInput 
           ref={myCateRef} 
           style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} 
           className='bg-secondary' 
-          onClick={() => {
+          onFocus={() => {
             handleCopy(myCateRef);
             handleCopyAlert();
+            myCateNameRef.current.style.borderColor = "#249542";
+          }}
+          onBlur={() => {
+            myCateNameRef.current.style.borderColor = "#323a49";
           }}
           type="text" 
           size="sm" 
