@@ -62,6 +62,11 @@ const AppHeader = () => {
               설정
             </CNavLink>
           </CNavItem>
+          <CNavItem>
+            <CNavLink to="/calendar" as={NavLink}>
+              캘린더
+            </CNavLink>
+          </CNavItem>
         </CHeaderNav>
         <CHeaderNav className="d-none d-md-flex ms-auto">
         </CHeaderNav>

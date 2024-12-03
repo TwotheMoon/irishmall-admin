@@ -3,7 +3,8 @@ import CIcon from '@coreui/icons-react'
 import {
   cilCog,
   cilHome,
-  cilCode
+  cilCode,
+  cilCalendar
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react-pro'
 
@@ -17,6 +18,12 @@ const _nav = [
   {
     component: CNavTitle,
     name: 'Tools',
+  },
+  {
+    component: CNavItem,
+    name: '캘린더',
+    to: '/calendar',
+    icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

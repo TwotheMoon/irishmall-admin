@@ -109,6 +109,10 @@ const CommaConversion = () => {
             txArea2Ref.current.value = Array.from(seen).join(",");
           }
         }
+
+        if(switchStatus){
+          navigator.clipboard.writeText(txArea2Ref.current.value);
+        }
   
         seen.clear();
         duplicateWords.clear();
@@ -119,7 +123,8 @@ const CommaConversion = () => {
       setSwitchStatus((prev) => !prev);
       
       if(e.target.checked) {
-        conversion()
+        conversion();
+        navigator.clipboard.writeText(txArea2Ref.current.value);
       }
     }
 
