@@ -6,7 +6,7 @@ import {
   CAccordionItem, 
   CButton, 
   CSmartTable } from "@coreui/react-pro";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { errorSelector, useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../atom";
 import { apiServerBaseUrl, createWhiteListApiEp, deleteWhiteListApiEp, localServerBaseUrl, readWhiteListApiEp, updateWhiteListApiEp } from "../../api";
 import { commonErrorModal, commonReqModal, commonResModal } from "../../utils";
@@ -47,22 +47,27 @@ const WhiteList = () => {
   // 화이트리스트 읽기
   const getData = async () => {
     setIsLoading(true);
-    
-    const res = await (await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${readWhiteListApiEp}`)).data.data;
-    const transformedData = res.map((item) => ({
-      id: item._id,
-      domain: item.domain,
-      desc: item.desc
-    }));
-    setItems(transformedData);
 
-    setIsLoading(false);
+    try {
+      const res = await (await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${readWhiteListApiEp}`)).data.data;
+      const transformedData = res.map((item) => ({
+        id: item._id,
+        domain: item.domain,
+        desc: item.desc
+      }));
+      setItems(transformedData);
+      setIsLoading(false);
+
+    } catch (error) {
+      commonErrorModal(setIsLoading, setShowModal, error);
+    } 
   };
 
   // 화이트리스트 생성 및 업데이트
   const createOrUpdateWhitelist = async () => {
-    try {
+    setIsLoading(true);
 
+    try {
       if(onConfirmType === "create"){
         const payload = {
           domain: inputValues.domain,
@@ -91,7 +96,7 @@ const WhiteList = () => {
           setShowModal
         );
       } else {
-        console.error("onCOnfirmType 없음");
+        commonErrorModal(setIsLoading, setShowModal, error);
       };
       
     } catch (error) {
@@ -107,6 +112,8 @@ const WhiteList = () => {
 
   // 화이트리스트 삭제
   const deleteWhitelist = async (id) => {
+    setIsLoading(true);
+
     try {
       const payload = { id };
       const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${deleteWhiteListApiEp}`, payload);

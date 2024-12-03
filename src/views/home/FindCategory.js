@@ -10,8 +10,9 @@ import {
   CSpinner} from "@coreui/react-pro";
 import PrintCategory from "./PrintCategory";
 import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
-import { copyAlertAtom, isLocalAtom } from "../../atom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { copyAlertAtom, isLocalAtom, showModalAtom } from "../../atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { commonErrorModal } from "../../utils";
 
 const FindCategory = () => {
   const searchInputRef = useRef();
@@ -20,6 +21,7 @@ const FindCategory = () => {
   const [searchCateData, setSearchCateData] = useState();
   const [copyAlert, setCopyAlert] = useRecoilState(copyAlertAtom);
   const isLocal = useRecoilValue(isLocalAtom);
+  const setShowModal = useSetRecoilState(showModalAtom);
 
    // 상품 카테고리코드 조회
    const getPopularCate = async (e) => {
@@ -36,15 +38,16 @@ const FindCategory = () => {
     }
 
     try {
-        const { data } = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
+        const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getPopularCateApiEP}`, {
         data: keyword
       });
-      setSearchCateData(data);
+      setSearchCateData(res.data.data);
       setIsSearchLoading(false);
 
     } catch (error) {
-      setIsSearchLoading(false);
       console.log(error);
+      commonErrorModal(() => {}, setShowModal, error);
+      setIsSearchLoading(false);
     }
   };
 

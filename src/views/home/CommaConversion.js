@@ -91,6 +91,7 @@ const CommaConversion = () => {
           setTimeout(() => {
             setShowDupAlert(false);
           }, 1500);
+
         } else {
           setDuplicateState(true);
           setDuplicateWordCount(duplicateWords.size);
@@ -102,8 +103,10 @@ const CommaConversion = () => {
   
           if(separatorType == "\n"){
             txArea1Ref.current.value = Array.from(seen).join("\n");
+            txArea2Ref.current.value = Array.from(seen).join(",");
           } else if(separatorType == ","){
             txArea1Ref.current.value = Array.from(seen).join(",");
+            txArea2Ref.current.value = Array.from(seen).join(",");
           }
         }
   
@@ -114,6 +117,10 @@ const CommaConversion = () => {
     // 키워드 자동 변환
     const autoTransferKeyword = (e) => {
       setSwitchStatus((prev) => !prev);
+      
+      if(e.target.checked) {
+        conversion()
+      }
     }
 
   return (
@@ -164,7 +171,7 @@ const CommaConversion = () => {
                     content="활성화시, 자동 키워드 변환 및 복사가 됩니다."
                     placement="bottom"
                   >
-                    <CFormSwitch className="mb-3" size="xl" id="automationSwitch" style={{width: "65px"}} checked={switchStatus} onChange={(e) => autoTransferKeyword(e.target.checked)}/>
+                    <CFormSwitch className="mb-3" size="xl" id="automationSwitch" style={{width: "65px"}} checked={switchStatus} onChange={autoTransferKeyword}/>
                   </CTooltip>
                 </div>
                 <CButton 
