@@ -53,7 +53,7 @@ const PrintMyCategory = ({idx, props}) => {
           ref={myCateRef} 
           style={{minWidth: "100px", maxWidth: "150px", cursor:"pointer", textAlign:"center"}} 
           className='bg-secondary' 
-          onFocus={() => {
+          onClick={() => {
             handleCopy(myCateRef);
             handleCopyAlert();
             myCateNameRef.current.style.borderColor = "#249542";

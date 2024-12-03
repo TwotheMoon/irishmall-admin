@@ -60,7 +60,7 @@ const PrintCategory = ({idx, props }) => {
           />
           <CFormInput 
             ref={naverCateRef} 
-            onFocus={() => {
+            onClick={() => {
               handleCopy(naverCateRef)
               handleCopyAlert();
               cateNameRef.current.style.borderColor = "#6261cc";
