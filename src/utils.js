@@ -1,16 +1,14 @@
-
 // 카피
 export const handleCopy = (ref) => {
   try {
-    if (ref.current && ref.current.value !== "") {
+    if (ref.current && ref.current.value !== '') {
       ref.current.select();
       navigator.clipboard.writeText(ref.current.value);
     }
-    
   } catch (error) {
-    console.log(error);      
+    console.log(error);
   }
-}
+};
 
 // 유닉스 시간 변환
 export const formattedUnixToDate = (date) => {
@@ -25,20 +23,22 @@ export const formattedUnixToDate = (date) => {
     timeZone: 'Asia/Seoul',
   };
   const formattedDate = new Intl.DateTimeFormat('en-GB', options)
-  .format(date)
-  .split(',')
-  .map((part, i) =>
-    i === 0
-      ? part.split('/').reverse().join('-') 
-      : part.trim()
-  )
-  .join(' ');
+    .format(date)
+    .split(',')
+    .map((part, i) => (i === 0 ? part.split('/').reverse().join('-') : part.trim()))
+    .join(' ');
 
   return formattedDate;
-}
+};
 
 // 공통 모달 (api 리퀘스트)
-export const commonReqModal = (type="default", title, desc="", setShowModal=()=>{}, onClick=()=>{}) => {
+export const commonReqModal = (
+  type = 'default',
+  title,
+  desc = '',
+  setShowModal = () => {},
+  onClick = () => {},
+) => {
   setShowModal({
     type,
     visible: true,
@@ -46,48 +46,50 @@ export const commonReqModal = (type="default", title, desc="", setShowModal=()=>
     desc,
     onClick,
     isCancelVisible: true,
-  })
+  });
 };
 
 // 공통 모달 (api 리스폰스)
-export const commonResModal = (res, title, setIsLoading=()=>{}, setShowModal=()=>{}) => {
-  if(res.data.status === 200 || res.data.status === 500){
+export const commonResModal = (res, title, setIsLoading = () => {}, setShowModal = () => {}) => {
+  if (res.data.status === 200 || res.data.status === 500) {
     setIsLoading(false);
 
     setShowModal({
-      type: "default",
+      type: 'default',
       visible: true,
       title,
       desc: res.data.message,
-      onClick: () => {commonCloseModal(setShowModal)},
+      onClick: () => {
+        commonCloseModal(setShowModal);
+      },
       isCancelVisible: false,
-    })
+    });
   }
 };
 
 // 공통 모달 (Close 시 초기화용)
 export const commonCloseModal = (setShowModal) => {
   setShowModal({
-    type: "default",
+    type: 'default',
     visible: false,
-    title: "",
-    desc: "",
+    title: '',
+    desc: '',
     onClick: () => {},
-    isCancelVisible: false
-  })
+    isCancelVisible: false,
+  });
 };
 
 export const commonErrorModal = (setIsLoading, setShowModal, error) => {
   setIsLoading(false);
-  
+
   setShowModal({
-    type: "error",
+    type: 'error',
     visible: true,
-    title: "오류가 발생했습니다.",
-    desc: error?.message || "관리자에게 문의해주세요.",
-    onClick: () => {commonCloseModal(setShowModal)},
-    isCancelVisible: false
-  })
-}
-
-
+    title: '오류가 발생했습니다.',
+    desc: error?.message || '관리자에게 문의해주세요.',
+    onClick: () => {
+      commonCloseModal(setShowModal);
+    },
+    isCancelVisible: false,
+  });
+};

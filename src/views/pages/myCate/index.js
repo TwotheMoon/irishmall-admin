@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import MyCateUpdate from "./MyCateUpdate";
-import { CAccordion } from "@coreui/react-pro";
-import MyCateTable from "./MyCateTable";
-
+import React, { useState } from 'react';
+import MyCateUpdate from './MyCateUpdate';
+import { CAccordion } from '@coreui/react-pro';
+import MyCateTable from './MyCateTable';
 
 const MyCate = () => {
-  const [reFetch, setReFetch] = useState("");
+  const [reFetch, setReFetch] = useState('');
 
-  return(
+  return (
     <>
-     <CAccordion alwaysOpen activeItemKey={1}>
-      <MyCateUpdate setReFetch={setReFetch} />
-      <MyCateTable reFetch={reFetch}/>
-     </CAccordion>
+      <CAccordion alwaysOpen activeItemKey={1}>
+        <MyCateUpdate setReFetch={setReFetch} />
+        <MyCateTable reFetch={reFetch} />
+      </CAccordion>
     </>
-  )
-}
+  );
+};
 
-export default MyCate
+export default MyCate;

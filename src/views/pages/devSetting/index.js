@@ -1,10 +1,9 @@
-import React from "react"
-import { CAccordion } from "@coreui/react-pro"
-import WhiteList from "./WhiteList"
-import NasLog from "./NasLog"
+import React from 'react';
+import { CAccordion } from '@coreui/react-pro';
+import WhiteList from './WhiteList';
+import NasLog from './NasLog';
 
 const DevSetting = () => {
-
   return (
     <>
       <CAccordion alwaysOpen activeItemKey={1}>
@@ -12,7 +11,7 @@ const DevSetting = () => {
         <NasLog />
       </CAccordion>
     </>
-  )
-}
+  );
+};
 
-export default DevSetting
+export default DevSetting;

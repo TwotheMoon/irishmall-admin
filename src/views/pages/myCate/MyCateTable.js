@@ -1,75 +1,74 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../../atom";
-import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from "../../../api";
-import { CAccordionBody, CAccordionHeader, CAccordionItem, CSmartTable } from "@coreui/react-pro";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { commonErrorModal } from "../../../utils";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
+import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from '../../../api';
+import { CAccordionBody, CAccordionHeader, CAccordionItem, CSmartTable } from '@coreui/react-pro';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { commonErrorModal } from '../../../utils';
 
-const MyCateTable = ({reFetch}) => {
+const MyCateTable = ({ reFetch }) => {
   const isLocal = useRecoilValue(isLocalAtom);
   const setIsLoading = useSetRecoilState(isLoadingAtom);
   const setShowModal = useSetRecoilState(showModalAtom);
 
-  const [ items, setItems ] = useState([]);
+  const [items, setItems] = useState([]);
 
-
-   // 테이블 컬럼
-   const columns = [
+  // 테이블 컬럼
+  const columns = [
     {
-      key: "cateName",
-      label: "카테고리설명",
+      key: 'cateName',
+      label: '카테고리설명',
       filter: true,
       sorter: true,
     },
     {
-      key: "myCate",
-      label: "마이카테",
+      key: 'myCate',
+      label: '마이카테',
       filter: true,
       sorter: true,
-      _style: {width: "120px", backgroundColor: "#61CBF3", color: "black", textAlign: "center"}
+      _style: { width: '120px', backgroundColor: '#61CBF3', color: 'black', textAlign: 'center' },
     },
     {
-      key: "auctionCate",
-      label: "A",
+      key: 'auctionCate',
+      label: 'A',
       filter: true,
       sorter: true,
-      _style: {width: "90px", backgroundColor: "#FF0000", color: "black", textAlign: "center"}
+      _style: { width: '90px', backgroundColor: '#FF0000', color: 'black', textAlign: 'center' },
     },
     {
-      key: "gmarketCate",
-      label: "G",
+      key: 'gmarketCate',
+      label: 'G',
       filter: true,
       sorter: true,
-      _style: {width: "100px", backgroundColor: "#00B050", color: "black", textAlign: "center"}
+      _style: { width: '100px', backgroundColor: '#00B050', color: 'black', textAlign: 'center' },
     },
     {
-      key: "naverCate",
-      label: "N",
+      key: 'naverCate',
+      label: 'N',
       filter: true,
       sorter: true,
-      _style: {width: "100px", backgroundColor: "#92D050", color: "black", textAlign: "center"}
+      _style: { width: '100px', backgroundColor: '#92D050', color: 'black', textAlign: 'center' },
     },
     {
-      key: "elevenCate",
-      label: "11",
+      key: 'elevenCate',
+      label: '11',
       filter: true,
       sorter: true,
-      _style: {width: "90px", backgroundColor: "#FFC000", color: "black", textAlign: "center"}
+      _style: { width: '90px', backgroundColor: '#FFC000', color: 'black', textAlign: 'center' },
     },
     {
-      key: "cupangCate",
-      label: "C",
+      key: 'cupangCate',
+      label: 'C',
       filter: true,
       sorter: true,
-      _style: {width: "80px",backgroundColor: "#FBE2D5", color: "black", textAlign: "center"}
+      _style: { width: '80px', backgroundColor: '#FBE2D5', color: 'black', textAlign: 'center' },
     },
     {
-      key: "kakaoCate",
-      label: "K",
+      key: 'kakaoCate',
+      label: 'K',
       filter: true,
       sorter: true,
-      _style: {width: "120px", backgroundColor: "#FFFF00", color: "black", textAlign: "center"}
+      _style: { width: '120px', backgroundColor: '#FFFF00', color: 'black', textAlign: 'center' },
     },
   ];
 
@@ -78,8 +77,10 @@ const MyCateTable = ({reFetch}) => {
     setIsLoading(true);
 
     try {
-      console.log("데이터 get");
-      const res = await (await axios.get(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getAllMyCateApiEP}`)).data.data;
+      console.log('데이터 get');
+      const res = await (
+        await axios.get(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getAllMyCateApiEP}`)
+      ).data.data;
       const transformedData = res.map((item) => ({
         id: item._id,
         cateName: item.cateName,
@@ -90,26 +91,25 @@ const MyCateTable = ({reFetch}) => {
         elevenCate: item.elevenCate,
         cupangCate: item.cupangCate,
         kakaoCate: item.kCate,
-        _cellProps: { all: {className: "text-center"}, cateName: {className: "text-start"}}
+        _cellProps: { all: { className: 'text-center' }, cateName: { className: 'text-start' } },
       }));
       setItems(transformedData);
       setIsLoading(false);
-
     } catch (error) {
       commonErrorModal(setIsLoading, setShowModal, error);
-    } 
+    }
   };
 
   useEffect(() => {
     (async () => {
       await getData();
     })();
-  }, [reFetch])
+  }, [reFetch]);
 
   return (
     <>
-      <CAccordionItem itemKey={1} className='mb-4'>
-        <CAccordionHeader className='w-100 position-relative'>마이 카테고리</CAccordionHeader>
+      <CAccordionItem itemKey={1} className="mb-4">
+        <CAccordionHeader className="w-100 position-relative">마이 카테고리</CAccordionHeader>
         <CAccordionBody>
           <CSmartTable
             activePage={1}
@@ -121,7 +121,7 @@ const MyCateTable = ({reFetch}) => {
             items={items}
             itemsPerPageSelect
             itemsPerPage={20}
-            itemsPerPageOptions={[5,10,20,50,100,200]}
+            itemsPerPageOptions={[5, 10, 20, 50, 100, 200]}
             pagination
             tableFilter
             tableProps={{
@@ -133,17 +133,13 @@ const MyCateTable = ({reFetch}) => {
               className: 'align-middle',
             }}
             scopedColumns={{
-              cateName: (item) => (
-                <td className="text-start">
-                  {item.cateName}
-                </td>
-              )
+              cateName: (item) => <td className="text-start">{item.cateName}</td>,
             }}
           />
         </CAccordionBody>
       </CAccordionItem>
     </>
-  )
-}
+  );
+};
 
-export default MyCateTable
+export default MyCateTable;

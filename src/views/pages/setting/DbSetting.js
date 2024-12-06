@@ -1,15 +1,10 @@
-import React from 'react'
-import axios from 'axios'
-import { 
-  CAccordionBody,
-  CAccordionHeader, 
-  CAccordionItem, 
-  CButton} from '@coreui/react-pro'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
-import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api'
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
-
+import React from 'react';
+import axios from 'axios';
+import { CAccordionBody, CAccordionHeader, CAccordionItem, CButton } from '@coreui/react-pro';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
+import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api';
+import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils';
 
 const DevSetting = () => {
   const setShowModal = useSetRecoilState(showModalAtom);
@@ -19,39 +14,38 @@ const DevSetting = () => {
   const updateNaverCate = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${updateNaverAllCateApiEP}`);
-      commonResModal(
-        res,
-        "네이버 카테고리 업데이트",
-        setIsLoading,
-        setShowModal
-      )
-      
+      const res = await axios.post(
+        `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${updateNaverAllCateApiEP}`,
+      );
+      commonResModal(res, '네이버 카테고리 업데이트', setIsLoading, setShowModal);
     } catch (error) {
       commonErrorModal(setIsLoading, setShowModal, error);
     }
   };
 
-  return(
+  return (
     <>
-      <CAccordionItem itemKey={1} className='mb-4'>
-        <CAccordionHeader className='w-100 position-relative'>데이터베이스 조작</CAccordionHeader>
+      <CAccordionItem itemKey={1} className="mb-4">
+        <CAccordionHeader className="w-100 position-relative">데이터베이스 조작</CAccordionHeader>
         <CAccordionBody>
-          <CButton 
-            color="danger" 
-            onClick={() => 
+          <CButton
+            color="danger"
+            onClick={() =>
               commonReqModal(
-                "default",
-                "네이버 카테고리 업데이트",
-                "네이버 카테고리를 업데이트 하시겠습니까?",
+                'default',
+                '네이버 카테고리 업데이트',
+                '네이버 카테고리를 업데이트 하시겠습니까?',
                 setShowModal,
-                updateNaverCate
+                updateNaverCate,
               )
-            }>네이버 카테고리 업데이트</CButton> 
+            }
+          >
+            네이버 카테고리 업데이트
+          </CButton>
         </CAccordionBody>
       </CAccordionItem>
     </>
-  )
-}
+  );
+};
 
 export default DevSetting;
