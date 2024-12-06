@@ -2,13 +2,14 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-// api 서버 url
-export const apiServerBaseUrl = "https://port-0-irishmall-api-server-m3u68qma5d734195.sel4.cloudtype.app";
+// 서버 기본 api url
+export const apiServerBaseUrl = "https://node.moondb.co.kr";
 export const localServerBaseUrl = "http://localhost:4000";
 export const healthCkEP = "/health";
 export const getTokenApiEP = "/getToken";
+export const getNasLogApiEP = "/getNasLog";
 
-// 
+// 카테고리 api url
 export const updateNaverAllCateApiEP = "/updateNaverAllCate";
 export const getPopularCateApiEP = "/getPopularCate";
 export const uploadMyCateExcelApiEP = "/uploadMyCateExcel"

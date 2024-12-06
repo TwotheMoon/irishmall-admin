@@ -7,3 +7,16 @@
   background-image: var(--cui-accordion-btn-icon) !important;
   transform: var(--cui-accordion-btn-icon-transform);
 }
+
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-on-hover:hover .rotate-icon {
+  animation: rotate360 0.7s ease-in-out;
+}

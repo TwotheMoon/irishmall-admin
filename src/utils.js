@@ -12,6 +12,31 @@ export const handleCopy = (ref) => {
   }
 }
 
+// 유닉스 시간 변환
+export const formattedUnixToDate = (date) => {
+  const options = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Seoul',
+  };
+  const formattedDate = new Intl.DateTimeFormat('en-GB', options)
+  .format(date)
+  .split(',')
+  .map((part, i) =>
+    i === 0
+      ? part.split('/').reverse().join('-') 
+      : part.trim()
+  )
+  .join(' ');
+
+  return formattedDate;
+}
+
 // 공통 모달 (api 리퀘스트)
 export const commonReqModal = (type="default", title, desc="", setShowModal=()=>{}, onClick=()=>{}) => {
   setShowModal({
@@ -64,3 +89,5 @@ export const commonErrorModal = (setIsLoading, setShowModal, error) => {
     isCancelVisible: false
   })
 }
+
+
