@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { apiServerBaseUrl, getNasLogApiEP, localServerBaseUrl } from '../../../api';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { apiServerBaseUrl, getNasLogApiEP, localServerBaseUrl } from '../../../api'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -9,11 +9,11 @@ import {
   CButton,
   CFormLabel,
   CVirtualScroller,
-} from '@coreui/react-pro';
-import { isLocalAtom, showModalAtom } from '../../../atom';
-import { commonErrorModal, formattedUnixToDate } from '../../../utils';
-import CIcon from '@coreui/icons-react';
-import { cilReload } from '@coreui/icons';
+} from '@coreui/react-pro'
+import { isLocalAtom, showModalAtom } from '../../../atom'
+import { commonErrorModal, formattedUnixToDate } from '../../../utils'
+import CIcon from '@coreui/icons-react'
+import { cilReload } from '@coreui/icons'
 
 const RotatingButton = ({ getNasLog }) => {
   return (
@@ -22,26 +22,26 @@ const RotatingButton = ({ getNasLog }) => {
       style={{ marginRight: '20px' }}
       className="rotate-on-hover"
       onClick={(e) => {
-        e.stopPropagation();
-        getNasLog();
+        e.stopPropagation()
+        getNasLog()
       }}
     >
       <CIcon icon={cilReload} style={{ width: '20px', height: '20px' }} className="rotate-icon" />
     </CButton>
-  );
-};
+  )
+}
 
 const NasLog = () => {
-  const isLocal = useRecoilValue(isLocalAtom);
-  const setShowModal = useSetRecoilState(showModalAtom);
-  const [, setIndex] = useState(0);
-  const [logs, setLogs] = useState({ connectionLogs: [], systemLogs: [] });
+  const isLocal = useRecoilValue(isLocalAtom)
+  const setShowModal = useSetRecoilState(showModalAtom)
+  const [, setIndex] = useState(0)
+  const [logs, setLogs] = useState({ connectionLogs: [], systemLogs: [] })
 
   const getNasLog = async () => {
     try {
       const res = await axios.get(
         `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getNasLogApiEP}`,
-      );
+      )
 
       setLogs({
         connectionLogs: res?.data[0].series[0].values
@@ -56,15 +56,15 @@ const NasLog = () => {
             log: list[2],
           }))
           .reverse(),
-      });
+      })
     } catch (error) {
-      commonErrorModal(() => {}, setShowModal, error);
+      commonErrorModal(() => {}, setShowModal, error)
     }
-  };
+  }
 
   useEffect(() => {
-    (async () => await getNasLog())();
-  }, []);
+    ;(async () => await getNasLog())()
+  }, [])
 
   return (
     <>
@@ -114,7 +114,7 @@ const NasLog = () => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  );
-};
+  )
+}
 
-export default NasLog;
+export default NasLog

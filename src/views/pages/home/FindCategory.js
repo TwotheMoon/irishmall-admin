@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
+import React, { useRef, useState } from 'react'
+import axios from 'axios'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -8,34 +8,34 @@ import {
   CButton,
   CFormInput,
   CSpinner,
-} from '@coreui/react-pro';
-import PrintCategory from './PrintCategory';
-import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../../api';
-import { copyAlertAtom, isLocalAtom, showModalAtom } from '../../../atom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { commonErrorModal } from '../../../utils';
+} from '@coreui/react-pro'
+import PrintCategory from './PrintCategory'
+import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../../api'
+import { copyAlertAtom, isLocalAtom, showModalAtom } from '../../../atom'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { commonErrorModal } from '../../../utils'
 
 const FindCategory = () => {
-  const searchInputRef = useRef();
+  const searchInputRef = useRef()
 
-  const [isSearchLoading, setIsSearchLoading] = useState(false);
-  const [searchCateData, setSearchCateData] = useState();
-  const [copyAlert, setCopyAlert] = useRecoilState(copyAlertAtom);
-  const isLocal = useRecoilValue(isLocalAtom);
-  const setShowModal = useSetRecoilState(showModalAtom);
+  const [isSearchLoading, setIsSearchLoading] = useState(false)
+  const [searchCateData, setSearchCateData] = useState()
+  const [copyAlert, setCopyAlert] = useRecoilState(copyAlertAtom)
+  const isLocal = useRecoilValue(isLocalAtom)
+  const setShowModal = useSetRecoilState(showModalAtom)
 
   // 상품 카테고리코드 조회
   const getPopularCate = async (e) => {
-    e.stopPropagation();
-    setIsSearchLoading(true);
-    setSearchCateData('');
+    e.stopPropagation()
+    setIsSearchLoading(true)
+    setSearchCateData('')
 
-    const keyword = searchInputRef.current.value;
+    const keyword = searchInputRef.current.value
 
     if (!keyword) {
-      setSearchCateData('');
-      setIsSearchLoading(false);
-      return;
+      setSearchCateData('')
+      setIsSearchLoading(false)
+      return
     }
 
     try {
@@ -44,15 +44,15 @@ const FindCategory = () => {
         {
           data: keyword,
         },
-      );
-      setSearchCateData(res.data.data);
-      setIsSearchLoading(false);
+      )
+      setSearchCateData(res.data.data)
+      setIsSearchLoading(false)
     } catch (error) {
-      console.log(error);
-      commonErrorModal(() => {}, setShowModal, error);
-      setIsSearchLoading(false);
+      console.log(error)
+      commonErrorModal(() => {}, setShowModal, error)
+      setIsSearchLoading(false)
     }
-  };
+  }
 
   return (
     <>
@@ -87,7 +87,7 @@ const FindCategory = () => {
                 onKeyUp={(e) => e.preventDefault()}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    getPopularCate(e);
+                    getPopularCate(e)
                   }
                 }}
               />
@@ -115,7 +115,7 @@ const FindCategory = () => {
                   <React.Fragment key={`${data.id}${idx}`}>
                     <PrintCategory idx={idx} props={data}></PrintCategory>
                   </React.Fragment>
-                );
+                )
               })
             ) : (
               <div className="w-100m text-center">키워드를 입력해주세요.</div>
@@ -135,7 +135,7 @@ const FindCategory = () => {
         복사되었습니다.
       </CAlert>
     </>
-  );
-};
+  )
+}
 
-export default FindCategory;
+export default FindCategory

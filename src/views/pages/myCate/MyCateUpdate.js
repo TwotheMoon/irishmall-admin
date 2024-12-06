@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -6,8 +6,8 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-} from '@coreui/react-pro';
-import StyledDropzone from '../setting/StyledDropzone';
+} from '@coreui/react-pro'
+import StyledDropzone from '../setting/StyledDropzone'
 
 const MyCateUpdate = ({ setReFetch }) => {
   return (
@@ -24,7 +24,7 @@ const MyCateUpdate = ({ setReFetch }) => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  );
-};
+  )
+}
 
-export default MyCateUpdate;
+export default MyCateUpdate

@@ -1,17 +1,17 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
-import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from '../../../api';
-import { CAccordionBody, CAccordionHeader, CAccordionItem, CSmartTable } from '@coreui/react-pro';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { commonErrorModal } from '../../../utils';
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
+import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from '../../../api'
+import { CAccordionBody, CAccordionHeader, CAccordionItem, CSmartTable } from '@coreui/react-pro'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { commonErrorModal } from '../../../utils'
 
 const MyCateTable = ({ reFetch }) => {
-  const isLocal = useRecoilValue(isLocalAtom);
-  const setIsLoading = useSetRecoilState(isLoadingAtom);
-  const setShowModal = useSetRecoilState(showModalAtom);
+  const isLocal = useRecoilValue(isLocalAtom)
+  const setIsLoading = useSetRecoilState(isLoadingAtom)
+  const setShowModal = useSetRecoilState(showModalAtom)
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([])
 
   // 테이블 컬럼
   const columns = [
@@ -70,17 +70,17 @@ const MyCateTable = ({ reFetch }) => {
       sorter: true,
       _style: { width: '120px', backgroundColor: '#FFFF00', color: 'black', textAlign: 'center' },
     },
-  ];
+  ]
 
   // 마이카테고리 읽기
   const getData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      console.log('데이터 get');
+      console.log('데이터 get')
       const res = await (
         await axios.get(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getAllMyCateApiEP}`)
-      ).data.data;
+      ).data.data
       const transformedData = res.map((item) => ({
         id: item._id,
         cateName: item.cateName,
@@ -92,19 +92,19 @@ const MyCateTable = ({ reFetch }) => {
         cupangCate: item.cupangCate,
         kakaoCate: item.kCate,
         _cellProps: { all: { className: 'text-center' }, cateName: { className: 'text-start' } },
-      }));
-      setItems(transformedData);
-      setIsLoading(false);
+      }))
+      setItems(transformedData)
+      setIsLoading(false)
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error);
+      commonErrorModal(setIsLoading, setShowModal, error)
     }
-  };
+  }
 
   useEffect(() => {
-    (async () => {
-      await getData();
-    })();
-  }, [reFetch]);
+    ;(async () => {
+      await getData()
+    })()
+  }, [reFetch])
 
   return (
     <>
@@ -139,7 +139,7 @@ const MyCateTable = ({ reFetch }) => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  );
-};
+  )
+}
 
-export default MyCateTable;
+export default MyCateTable

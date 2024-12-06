@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import {
   CAccordionBody,
   CAccordionHeader,
   CAccordionItem,
   CButton,
   CSmartTable,
-} from '@coreui/react-pro';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
+} from '@coreui/react-pro'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
 import {
   apiServerBaseUrl,
   createWhiteListApiEp,
@@ -16,18 +16,18 @@ import {
   localServerBaseUrl,
   readWhiteListApiEp,
   updateWhiteListApiEp,
-} from '../../../api';
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils';
-import { CommonModal } from '../../../layout/Modal';
+} from '../../../api'
+import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
+import { CommonModal } from '../../../layout/Modal'
 
 const WhiteList = () => {
-  const isLocal = useRecoilValue(isLocalAtom);
-  const setShowModal = useSetRecoilState(showModalAtom);
-  const setIsLoading = useSetRecoilState(isLoadingAtom);
+  const isLocal = useRecoilValue(isLocalAtom)
+  const setShowModal = useSetRecoilState(showModalAtom)
+  const setIsLoading = useSetRecoilState(isLoadingAtom)
 
-  const [items, setItems] = useState([]);
-  const [inputValues, setInputValues] = useState({ id: '', domain: '', desc: '' });
-  const [onConfirmType, setOnConfirmType] = useState('');
+  const [items, setItems] = useState([])
+  const [inputValues, setInputValues] = useState({ id: '', domain: '', desc: '' })
+  const [onConfirmType, setOnConfirmType] = useState('')
 
   // 테이블 컬럼
   const columns = [
@@ -47,142 +47,142 @@ const WhiteList = () => {
       key: 'btns',
       _style: { width: '150px', textAlign: 'center' },
     },
-  ];
+  ]
 
   const handleInputChange = (field, value) => {
-    setInputValues((prev) => ({ ...prev, [field]: value }));
-  };
+    setInputValues((prev) => ({ ...prev, [field]: value }))
+  }
 
   // 화이트리스트 읽기
   const getData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       const res = await (
         await axios.post(`${isLocal ? localServerBaseUrl : apiServerBaseUrl}${readWhiteListApiEp}`)
-      ).data.data;
+      ).data.data
       const transformedData = res.map((item) => ({
         id: item._id,
         domain: item.domain,
         desc: item.desc,
-      }));
-      setItems(transformedData);
-      setIsLoading(false);
+      }))
+      setItems(transformedData)
+      setIsLoading(false)
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error);
+      commonErrorModal(setIsLoading, setShowModal, error)
     }
-  };
+  }
 
   // 화이트리스트 생성 및 업데이트
   const createOrUpdateWhitelist = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       if (onConfirmType === 'create') {
         const payload = {
           domain: inputValues.domain,
           desc: inputValues.desc,
-        };
+        }
         const res = await axios.post(
           `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${createWhiteListApiEp}`,
           payload,
-        );
-        commonResModal(res, '화이트리스트 추가', setIsLoading, setShowModal);
+        )
+        commonResModal(res, '화이트리스트 추가', setIsLoading, setShowModal)
       } else if (onConfirmType === 'update') {
         const payload = {
           id: inputValues.id,
           domain: inputValues.domain,
           desc: inputValues.desc,
-        };
+        }
 
         const res = await axios.post(
           `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${updateWhiteListApiEp}`,
           payload,
-        );
-        commonResModal(res, '화이트리스트 수정', setIsLoading, setShowModal);
+        )
+        commonResModal(res, '화이트리스트 수정', setIsLoading, setShowModal)
       } else {
-        commonErrorModal(setIsLoading, setShowModal, error);
+        commonErrorModal(setIsLoading, setShowModal, error)
       }
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error);
+      commonErrorModal(setIsLoading, setShowModal, error)
     } finally {
-      setInputValues({ id: '', domain: '', desc: '' });
-      setOnConfirmType('');
-      getData();
+      setInputValues({ id: '', domain: '', desc: '' })
+      setOnConfirmType('')
+      getData()
     }
-  };
+  }
 
   // 화이트리스트 삭제
   const deleteWhitelist = async (id) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      const payload = { id };
+      const payload = { id }
       const res = await axios.post(
         `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${deleteWhiteListApiEp}`,
         payload,
-      );
-      commonResModal(res, '화이트 리스트 삭제', setIsLoading, setShowModal);
+      )
+      commonResModal(res, '화이트 리스트 삭제', setIsLoading, setShowModal)
 
-      getData();
+      getData()
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error);
+      commonErrorModal(setIsLoading, setShowModal, error)
     }
-  };
+  }
 
   useEffect(() => {
     try {
-      (async () => {
-        await getData();
-      })();
+      ;(async () => {
+        await getData()
+      })()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  }, []);
+  }, [])
 
   // 생성 버튼 임의 커스텀 추가
   useEffect(() => {
     const tHeadElement =
-      document.querySelector('.form-label').parentElement.parentElement.parentElement;
+      document.querySelector('.form-label').parentElement.parentElement.parentElement
     if (tHeadElement) {
-      const wrapperDiv = document.createElement('div');
-      wrapperDiv.classList.add('wrapper-div');
+      const wrapperDiv = document.createElement('div')
+      wrapperDiv.classList.add('wrapper-div')
 
-      const filterDivOne = tHeadElement.children[0];
-      const filterDivTwo = tHeadElement.children[1];
+      const filterDivOne = tHeadElement.children[0]
+      const filterDivTwo = tHeadElement.children[1]
 
-      tHeadElement.insertBefore(wrapperDiv, filterDivOne);
+      tHeadElement.insertBefore(wrapperDiv, filterDivOne)
 
-      wrapperDiv.appendChild(filterDivOne);
-      wrapperDiv.appendChild(filterDivTwo);
+      wrapperDiv.appendChild(filterDivOne)
+      wrapperDiv.appendChild(filterDivTwo)
 
-      wrapperDiv.classList.add('d-flex');
-      wrapperDiv.style.maxWidth = '50%';
+      wrapperDiv.classList.add('d-flex')
+      wrapperDiv.style.maxWidth = '50%'
 
-      tHeadElement.classList.add('d-flex');
-      tHeadElement.style.flexWrap = 'unset';
-      tHeadElement.style.alignItems = 'center';
-      tHeadElement.style.justifyContent = 'space-between';
+      tHeadElement.classList.add('d-flex')
+      tHeadElement.style.flexWrap = 'unset'
+      tHeadElement.style.alignItems = 'center'
+      tHeadElement.style.justifyContent = 'space-between'
 
-      const button = document.createElement('button');
-      button.className = 'btn btn-primary btn-sm square';
-      button.style.width = '50px';
-      button.style.height = '31px';
-      button.textContent = '추가';
+      const button = document.createElement('button')
+      button.className = 'btn btn-primary btn-sm square'
+      button.style.width = '50px'
+      button.style.height = '31px'
+      button.textContent = '추가'
       button.onclick = () => {
-        setOnConfirmType('create');
-        setInputValues({ domain: '', desc: '' });
+        setOnConfirmType('create')
+        setInputValues({ domain: '', desc: '' })
         commonReqModal(
           'whitelist',
           '화이트리스트 추가',
           undefined,
           setShowModal,
           createOrUpdateWhitelist,
-        );
-      };
-      tHeadElement.appendChild(button);
+        )
+      }
+      tHeadElement.appendChild(button)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -208,9 +208,9 @@ const WhiteList = () => {
                         shape="square"
                         size="sm"
                         onClick={() => {
-                          setOnConfirmType('update');
-                          setInputValues({ id: item.id, domain: item.domain, desc: item.desc });
-                          commonReqModal('whitelist', '화이트리스트 수정', '', setShowModal);
+                          setOnConfirmType('update')
+                          setInputValues({ id: item.id, domain: item.domain, desc: item.desc })
+                          commonReqModal('whitelist', '화이트리스트 수정', '', setShowModal)
                         }}
                       >
                         수정
@@ -226,14 +226,14 @@ const WhiteList = () => {
                             '삭제하시겠습니까?',
                             setShowModal,
                             () => deleteWhitelist(item.id),
-                          );
+                          )
                         }}
                       >
                         삭제
                       </CButton>
                     </td>
                   </>
-                );
+                )
               },
             }}
             sorterValue={{ column: 'domain', state: 'desc' }}
@@ -257,7 +257,7 @@ const WhiteList = () => {
         onConfirm={createOrUpdateWhitelist}
       />
     </>
-  );
-};
+  )
+}
 
-export default WhiteList;
+export default WhiteList

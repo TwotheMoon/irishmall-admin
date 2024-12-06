@@ -1,8 +1,8 @@
-import React from 'react';
-import { CAccordion } from '@coreui/react-pro';
-import FindCategory from './FindCategory';
-import CommaConversion from './CommaConversion';
-import SearchKeywordTool from './SearchKeywordTool';
+import React from 'react'
+import { CAccordion } from '@coreui/react-pro'
+import FindCategory from './FindCategory'
+import CommaConversion from './CommaConversion'
+import SearchKeywordTool from './SearchKeywordTool'
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
         <SearchKeywordTool />
       </CAccordion>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

@@ -1,38 +1,38 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef } from 'react';
-import { CFormInput } from '@coreui/react-pro';
-import { copyAlertAtom } from '../../../atom';
-import { handleCopy } from '../../../utils';
-import { useSetRecoilState } from 'recoil';
+import React, { useEffect, useRef } from 'react'
+import { CFormInput } from '@coreui/react-pro'
+import { copyAlertAtom } from '../../../atom'
+import { handleCopy } from '../../../utils'
+import { useSetRecoilState } from 'recoil'
 
 const PrintMyCategory = ({ idx, props }) => {
-  const myCateNameRef = useRef(null);
-  const myCateRef = useRef(null);
-  const setCopyAlert = useSetRecoilState(copyAlertAtom);
+  const myCateNameRef = useRef(null)
+  const myCateRef = useRef(null)
+  const setCopyAlert = useSetRecoilState(copyAlertAtom)
 
   const handleCopyAlert = () => {
-    setCopyAlert(true);
+    setCopyAlert(true)
     setTimeout(() => {
-      setCopyAlert(false);
-    }, 1000);
-  };
+      setCopyAlert(false)
+    }, 1000)
+  }
 
   useEffect(() => {
     try {
       if (props) {
-        const { cateName, myCate } = props;
+        const { cateName, myCate } = props
 
         if (myCateNameRef.current) {
-          myCateNameRef.current.value = cateName || '';
+          myCateNameRef.current.value = cateName || ''
         }
         if (myCateRef.current) {
-          myCateRef.current.value = myCate || '';
+          myCateRef.current.value = myCate || ''
         }
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  }, [props]);
+  }, [props])
 
   return (
     <>
@@ -54,12 +54,12 @@ const PrintMyCategory = ({ idx, props }) => {
           style={{ minWidth: '100px', maxWidth: '150px', cursor: 'pointer', textAlign: 'center' }}
           className="bg-secondary"
           onClick={() => {
-            handleCopy(myCateRef);
-            handleCopyAlert();
-            myCateNameRef.current.style.borderColor = '#249542';
+            handleCopy(myCateRef)
+            handleCopyAlert()
+            myCateNameRef.current.style.borderColor = '#249542'
           }}
           onBlur={() => {
-            myCateNameRef.current.style.borderColor = '#323a49';
+            myCateNameRef.current.style.borderColor = '#323a49'
           }}
           type="text"
           size="sm"
@@ -67,7 +67,7 @@ const PrintMyCategory = ({ idx, props }) => {
         />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PrintMyCategory;
+export default PrintMyCategory

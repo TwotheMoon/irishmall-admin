@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -12,39 +12,39 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-} from '@coreui/react-pro';
-import naverIdImgPath from '../../../assets/images/naverIdImg.png';
+} from '@coreui/react-pro'
+import naverIdImgPath from '../../../assets/images/naverIdImg.png'
 
 const SearchKeywordTool = () => {
-  const loginInputRef = useRef();
+  const loginInputRef = useRef()
 
-  const [showModal, setShowModal] = useState(false);
-  const [keywordUrl, setKeywordUrl] = useState();
-  let newNaverId;
+  const [showModal, setShowModal] = useState(false)
+  const [keywordUrl, setKeywordUrl] = useState()
+  let newNaverId
 
   // 네이버 광고 아이디 입력
   const setNaverId = () => {
     if (!loginInputRef.current.value) {
-      alert('ID 번호를 입력해주세요.');
+      alert('ID 번호를 입력해주세요.')
     } else {
-      newNaverId = loginInputRef.current.value;
-      localStorage.setItem('naverId', newNaverId);
-      alert('로그인 되었습니다.');
-      window.location.reload();
+      newNaverId = loginInputRef.current.value
+      localStorage.setItem('naverId', newNaverId)
+      alert('로그인 되었습니다.')
+      window.location.reload()
     }
-  };
+  }
 
   // 키워드 도구 아이프레임 최초 로그인
   useEffect(() => {
-    let naverId;
-    naverId = localStorage.getItem('naverId');
+    let naverId
+    naverId = localStorage.getItem('naverId')
     if (!naverId || naverId == null) {
-      setShowModal(true);
+      setShowModal(true)
     } else {
-      const createUrl = `https://manage.searchad.naver.com/customers/${naverId}/tool/keyword-planner`;
-      setKeywordUrl(createUrl);
+      const createUrl = `https://manage.searchad.naver.com/customers/${naverId}/tool/keyword-planner`
+      setKeywordUrl(createUrl)
     }
-  });
+  })
   return (
     <>
       <CAccordionItem itemKey={1} className="mb-4">
@@ -86,7 +86,7 @@ const SearchKeywordTool = () => {
         </CModalFooter>
       </CModal>
     </>
-  );
-};
+  )
+}
 
-export default SearchKeywordTool;
+export default SearchKeywordTool

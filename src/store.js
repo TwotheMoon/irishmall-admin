@@ -1,19 +1,19 @@
-import { legacy_createStore as createStore } from 'redux';
+import { legacy_createStore as createStore } from 'redux'
 
 const initialState = {
   sidebarShow: true,
   asideShow: false,
   theme: 'light',
-};
+}
 
 const changeState = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'set':
-      return { ...state, ...rest };
+      return { ...state, ...rest }
     default:
-      return state;
+      return state
   }
-};
+}
 
-const store = createStore(changeState);
-export default store;
+const store = createStore(changeState)
+export default store

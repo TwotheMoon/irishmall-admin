@@ -1,7 +1,7 @@
-import React from 'react';
-import { CAccordion } from '@coreui/react-pro';
-import LinkList from './LinkList';
-import DbSetting from './DbSetting';
+import React from 'react'
+import { CAccordion } from '@coreui/react-pro'
+import LinkList from './LinkList'
+import DbSetting from './DbSetting'
 
 const Setting = () => {
   return (
@@ -11,7 +11,7 @@ const Setting = () => {
         <DbSetting />
       </CAccordion>
     </>
-  );
-};
+  )
+}
 
-export default Setting;
+export default Setting

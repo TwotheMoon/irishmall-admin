@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -7,7 +7,7 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-} from '@coreui/react-pro';
+} from '@coreui/react-pro'
 import {
   _79domeUrl,
   cloudTypeServerUrl,
@@ -30,15 +30,15 @@ import {
   sellerfriendUrl,
   sellporterAdminUrl,
   zentradeUrl,
-} from '../../../api';
-import CIcon from '@coreui/icons-react';
-import { cilTruck, cibNintendo, cilCode, cilEqualizer } from '@coreui/icons';
+} from '../../../api'
+import CIcon from '@coreui/icons-react'
+import { cilTruck, cibNintendo, cilCode, cilEqualizer } from '@coreui/icons'
 
 const LinkList = () => {
   const onClickLinkBtn = (url) => {
-    if (!url) return;
-    window.open(url);
-  };
+    if (!url) return
+    window.open(url)
+  }
 
   return (
     <>
@@ -214,7 +214,7 @@ const LinkList = () => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  );
-};
+  )
+}
 
-export default LinkList;
+export default LinkList

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -10,123 +10,121 @@ import {
   CFormSwitch,
   CFormTextarea,
   CTooltip,
-} from '@coreui/react-pro';
+} from '@coreui/react-pro'
 
 const CommaConversion = () => {
-  const txArea1Ref = useRef();
-  const txArea2Ref = useRef();
+  const txArea1Ref = useRef()
+  const txArea2Ref = useRef()
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [showDupAlert, setShowDupAlert] = useState(false);
-  const [duplicateWordCount, setDuplicateWordCount] = useState(0);
-  const [duplicateState, setDuplicateState] = useState(false);
-  const [switchStatus, setSwitchStatus] = useState(false);
+  const [showAlert, setShowAlert] = useState(false)
+  const [showDupAlert, setShowDupAlert] = useState(false)
+  const [duplicateWordCount, setDuplicateWordCount] = useState(0)
+  const [duplicateState, setDuplicateState] = useState(false)
+  const [switchStatus, setSwitchStatus] = useState(false)
 
   const reset = () => {
-    txArea1Ref.current.value = '';
-    txArea2Ref.current.value = '';
-  };
+    txArea1Ref.current.value = ''
+    txArea2Ref.current.value = ''
+  }
 
   // 키워드 변환 정규식
   const conversion = () => {
-    const keywords = txArea1Ref.current.value;
+    const keywords = txArea1Ref.current.value
     const conversionedWords = keywords
-      .replace(/\n/g, ',')
-      .replace(/\s+/g, '')
-      .replace(/^,|,$/g, '')
-      .replace(/,+/g, ',')
-      .replace(/(,)(?=\s*,)/g, ',')
-      .replace(/,\s*$/, '');
+      .split(/[\n,]+/)
+      .map((word) => word.trim())
+      .filter(Boolean)
+      .join(',')
 
-    txArea2Ref.current.value = conversionedWords;
+    txArea2Ref.current.value = conversionedWords
 
     if (switchStatus && conversionedWords !== '') {
-      navigator.clipboard.writeText(conversionedWords);
+      navigator.clipboard.writeText(conversionedWords)
     }
-  };
+  }
 
   // 변환된 키워드 복사
   const handleTextAreaClick = () => {
     if (txArea2Ref.current && txArea2Ref.current.value !== '') {
-      txArea2Ref.current.select();
+      txArea2Ref.current.select()
 
-      navigator.clipboard.writeText(txArea2Ref.current.value);
+      navigator.clipboard.writeText(txArea2Ref.current.value)
 
-      setShowAlert(true);
+      setShowAlert(true)
       setTimeout(() => {
-        setShowAlert(false);
-      }, 1500);
+        setShowAlert(false)
+      }, 1500)
     }
-  };
+  }
 
   // 키워드 중복 검사
   const checkDuplicate = () => {
-    let separatorType;
-    let words;
-    if (!txArea1Ref.current.value) return;
+    let separatorType
+    let words
+    if (!txArea1Ref.current.value) return
 
     if (txArea1Ref.current.value.includes('\n')) {
-      separatorType = '\n';
-      words = txArea1Ref.current.value.split('\n').map((word) => word.trim());
+      separatorType = '\n'
+      words = txArea1Ref.current.value.split('\n').map((word) => word.trim())
     } else if (txArea1Ref.current.value.includes(',')) {
-      separatorType = ',';
-      words = txArea1Ref.current.value.split(',').map((word) => word.trim());
+      separatorType = ','
+      words = txArea1Ref.current.value.split(',').map((word) => word.trim())
     }
 
-    const seen = new Set();
-    const duplicateWords = new Set();
+    const seen = new Set()
+    const duplicateWords = new Set()
 
-    if (!words) return;
+    if (!words) return
 
     words.forEach((word) => {
       if (seen.has(word)) {
-        duplicateWords.add(word);
+        duplicateWords.add(word)
       } else {
-        seen.add(word);
+        seen.add(word)
       }
-    });
+    })
 
     if (!duplicateWords || duplicateWords.size == 0) {
-      setDuplicateState(false);
-      setShowDupAlert(true);
+      setDuplicateState(false)
+      setShowDupAlert(true)
       setTimeout(() => {
-        setShowDupAlert(false);
-      }, 1500);
+        setShowDupAlert(false)
+      }, 1500)
     } else {
-      setDuplicateState(true);
-      setDuplicateWordCount(duplicateWords.size);
-      setShowDupAlert(true);
+      setDuplicateState(true)
+      setDuplicateWordCount(duplicateWords.size)
+      setShowDupAlert(true)
 
       setTimeout(() => {
-        setShowDupAlert(false);
-      }, 1500);
+        setShowDupAlert(false)
+      }, 1500)
 
       if (separatorType == '\n') {
-        txArea1Ref.current.value = Array.from(seen).join('\n');
-        txArea2Ref.current.value = Array.from(seen).join(',');
+        txArea1Ref.current.value = Array.from(seen).join('\n')
+        txArea2Ref.current.value = Array.from(seen).join(',')
       } else if (separatorType == ',') {
-        txArea1Ref.current.value = Array.from(seen).join(',');
-        txArea2Ref.current.value = Array.from(seen).join(',');
+        txArea1Ref.current.value = Array.from(seen).join(',')
+        txArea2Ref.current.value = Array.from(seen).join(',')
       }
     }
 
     if (switchStatus) {
-      navigator.clipboard.writeText(txArea2Ref.current.value);
+      navigator.clipboard.writeText(txArea2Ref.current.value)
     }
 
-    seen.clear();
-    duplicateWords.clear();
-  };
+    seen.clear()
+    duplicateWords.clear()
+  }
 
   // 키워드 자동 변환
   const autoTransferKeyword = (e) => {
-    setSwitchStatus((prev) => !prev);
+    setSwitchStatus((prev) => !prev)
 
     if (e.target.checked) {
-      conversion();
-      navigator.clipboard.writeText(txArea2Ref.current.value);
+      conversion()
+      navigator.clipboard.writeText(txArea2Ref.current.value)
     }
-  };
+  }
 
   return (
     <>
@@ -219,7 +217,7 @@ const CommaConversion = () => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  );
-};
+  )
+}
 
-export default CommaConversion;
+export default CommaConversion

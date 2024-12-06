@@ -1,5 +1,5 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
+import React from 'react'
+import { useRecoilState } from 'recoil'
 import {
   CButton,
   CFormInput,
@@ -9,16 +9,16 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-} from '@coreui/react-pro';
-import { commonCloseModal } from '../utils';
-import { showModalAtom } from '../atom';
+} from '@coreui/react-pro'
+import { commonCloseModal } from '../utils'
+import { showModalAtom } from '../atom'
 
 // 공통 모달
 /* 모달 내의 input 값이 필요한 경우 CommonModal 해당 페이지 직접 호출 및 매개변수를 통해 값전달, 함수실행 */
 /* 이외의 단순 confirm 모달의 경우 modalType default, error 사용 */
 export const CommonModal = ({ inputValues, onInputChange, onConfirm }) => {
-  const [showModal, setShowModal] = useRecoilState(showModalAtom);
-  const modalType = showModal?.type;
+  const [showModal, setShowModal] = useRecoilState(showModalAtom)
+  const modalType = showModal?.type
 
   return (
     <CModal
@@ -75,5 +75,5 @@ export const CommonModal = ({ inputValues, onInputChange, onConfirm }) => {
         </CButton>
       </CModalFooter>
     </CModal>
-  );
-};
+  )
+}
