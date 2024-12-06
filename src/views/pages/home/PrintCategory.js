@@ -6,9 +6,9 @@ import CIcon from '@coreui/icons-react';
 import {
   cilLevelUp
 } from '@coreui/icons'
-import { handleCopy } from '../../utils';
+import { handleCopy } from '../../../utils';
 import { useSetRecoilState } from 'recoil';
-import { copyAlertAtom } from '../../atom';
+import { copyAlertAtom } from '../../../atom';
 
 const PrintCategory = ({idx, props }) => {
   const cateNameRef = useRef(null);

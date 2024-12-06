@@ -12,7 +12,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle} from "@coreui/react-pro";
-  import naverIdImgPath from '../../assets/images/naverIdImg.png';
+  import naverIdImgPath from '../../../assets/images/naverIdImg.png';
 
 const SearchKeywordTool = () => {
   const loginInputRef = useRef();

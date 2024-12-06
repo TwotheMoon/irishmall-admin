@@ -6,20 +6,22 @@ import {
   CAccordionItem, 
   CButton, 
   CSmartTable } from "@coreui/react-pro";
-import { errorSelector, useRecoilValue, useSetRecoilState } from "recoil";
-import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../atom";
-import { apiServerBaseUrl, createWhiteListApiEp, deleteWhiteListApiEp, localServerBaseUrl, readWhiteListApiEp, updateWhiteListApiEp } from "../../api";
-import { commonErrorModal, commonReqModal, commonResModal } from "../../utils";
-import { CommonModal } from "../../layout/Modal";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../../atom";
+import { apiServerBaseUrl, createWhiteListApiEp, deleteWhiteListApiEp, localServerBaseUrl, readWhiteListApiEp, updateWhiteListApiEp } from "../../../api";
+import { commonErrorModal, commonReqModal, commonResModal } from "../../../utils";
+import { CommonModal } from "../../../layout/Modal";
 
 const WhiteList = () => {
-  const [items, setItems] = useState([]);
-  const [ inputValues, setInputValues ] = useState({ id: "", domain: "", desc: ""});
-  const [onConfirmType, setOnConfirmType] = useState("");
   const isLocal = useRecoilValue(isLocalAtom);
   const setShowModal = useSetRecoilState(showModalAtom);
   const setIsLoading = useSetRecoilState(isLoadingAtom);
+  
+  const [ items, setItems ] = useState([]);
+  const [ inputValues, setInputValues ] = useState({ id: "", domain: "", desc: ""});
+  const [ onConfirmType, setOnConfirmType ] = useState("");
 
+  
   // 테이블 컬럼
   const columns = [
     {

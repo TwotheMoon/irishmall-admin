@@ -9,10 +9,10 @@ import {
   CFormInput, 
   CSpinner} from "@coreui/react-pro";
 import PrintCategory from "./PrintCategory";
-import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../api';
-import { copyAlertAtom, isLocalAtom, showModalAtom } from "../../atom";
+import { apiServerBaseUrl, getPopularCateApiEP, localServerBaseUrl } from '../../../api';
+import { copyAlertAtom, isLocalAtom, showModalAtom } from "../../../atom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { commonErrorModal } from "../../utils";
+import { commonErrorModal } from "../../../utils";
 
 const FindCategory = () => {
   const searchInputRef = useRef();

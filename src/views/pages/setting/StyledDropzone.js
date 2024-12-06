@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from "react";
 import axios from 'axios';
 import { useDropzone } from "react-dropzone";
-import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../atom";
+import { isLoadingAtom, isLocalAtom, showModalAtom } from "../../../atom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { localServerBaseUrl, apiServerBaseUrl, uploadMyCateExcelApiEP } from "../../api"
+import { localServerBaseUrl, apiServerBaseUrl, uploadMyCateExcelApiEP } from "../../../api"
 import { CIcon } from '@coreui/icons-react';
 import { cilFileExcel } from '@coreui/icons-pro';
-import { commonCloseModal, commonErrorModal, commonReqModal, commonResModal } from "../../utils";
+import { commonErrorModal, commonReqModal, commonResModal } from "../../../utils";
 import { CButton } from "@coreui/react-pro";
 
 const baseStyle = {
@@ -36,13 +36,12 @@ const rejectStyle = {
   borderColor: '#ff1744'
 };
 
-function StyledDropzone() {
+function StyledDropzone({setReFetch}) {
   const isLocal = useRecoilValue(isLocalAtom);
   const setIsLoading = useSetRecoilState(isLoadingAtom);
   const setShowModal = useSetRecoilState(showModalAtom);
   const [acceptedFiles, setAcceptedFiles] = useState([]);
 
-  
   const onDrop = (files) => {
     processFileUpload(files);
   };
@@ -83,6 +82,7 @@ function StyledDropzone() {
         setShowModal
       );
       setAcceptedFiles([]);
+      setReFetch(Date.now())
 
     } catch (error) {
       console.log(error);

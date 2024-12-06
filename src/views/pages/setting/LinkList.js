@@ -28,7 +28,7 @@ import {
   parabroUrl, 
   sellerfriendUrl, 
   sellporterAdminUrl, 
-  zentradeUrl } from '../../api'
+  zentradeUrl } from '../../../api'
   import CIcon from '@coreui/icons-react'
   import {
     cilTruck,

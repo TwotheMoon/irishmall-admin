@@ -17,7 +17,6 @@ import {
 import CIcon from '@coreui/icons-react'
 import {
   cilContrast,
-  cilApplicationsSettings,
   cilMenu,
   cilMoon,
   cilSun,
@@ -32,7 +31,6 @@ const AppHeader = () => {
   const { colorMode, setColorMode } = useColorModes('coreui-pro-react-admin-template-theme-default')
 
   const dispatch = useDispatch()
-  const asideShow = useSelector((state) => state.asideShow)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   useEffect(() => {
@@ -58,13 +56,18 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink to="/setting" as={NavLink}>
-              설정
+            <CNavLink to="/myCate" as={NavLink}>
+              마이카테
             </CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink to="/calendar" as={NavLink}>
               캘린더
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink to="/setting" as={NavLink}>
+              설정
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
@@ -119,12 +122,6 @@ const AppHeader = () => {
           </li>
           <AppHeaderDropdown />
         </CHeaderNav>
-        <CHeaderToggler
-          onClick={() => dispatch({ type: 'set', asideShow: !asideShow })}
-          style={{ marginInlineEnd: '-12px' }}
-        >
-          <CIcon icon={cilApplicationsSettings} size="lg" />
-        </CHeaderToggler>
       </CContainer>
       <CContainer className="px-4" fluid>
         <AppBreadcrumb />

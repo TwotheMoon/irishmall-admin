@@ -4,7 +4,8 @@ import {
   cilCog,
   cilHome,
   cilCode,
-  cilCalendar
+  cilCalendar,
+  cilListRich
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react-pro'
 
@@ -21,9 +22,19 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: '마이카테',
+    to: '/myCate',
+    icon: <CIcon icon={cilListRich} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: '캘린더',
     to: '/calendar',
     icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: 'Settings',
   },
   {
     component: CNavItem,

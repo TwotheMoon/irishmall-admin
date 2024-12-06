@@ -8,6 +8,7 @@ export const localServerBaseUrl = "http://localhost:4000";
 export const healthCkEP = "/health";
 export const getTokenApiEP = "/getToken";
 export const getNasLogApiEP = "/getNasLog";
+export const getAllMyCateApiEP = "/getAllMyCate";
 
 // 카테고리 api url
 export const updateNaverAllCateApiEP = "/updateNaverAllCate";

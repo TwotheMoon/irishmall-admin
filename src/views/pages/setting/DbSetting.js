@@ -6,9 +6,9 @@ import {
   CAccordionItem, 
   CButton} from '@coreui/react-pro'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom'
-import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../api'
-import { commonErrorModal, commonReqModal, commonResModal } from '../../utils'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
+import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api'
+import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
 
 
 const DevSetting = () => {
