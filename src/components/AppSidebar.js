@@ -39,7 +39,7 @@ const AppSidebar = () => {
           <img src={kunstayLogo} />
           {isLocal && (
             <CBadge color="danger" style={{ display: 'absolute', top: '10px', right: '10px' }} shape="rounded-pill">
-              Staging
+              DevMode
             </CBadge>
           )}
         </CSidebarBrand>
