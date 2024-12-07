@@ -2,7 +2,6 @@ import axios from 'axios'
 
 axios.defaults.withCredentials = true
 
-// watchtower test
 // 서버 기본 api url
 export const apiServerBaseUrl = 'https://node.moondb.co.kr'
 export const localServerBaseUrl = 'http://localhost:4000'
