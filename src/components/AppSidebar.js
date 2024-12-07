@@ -1,8 +1,10 @@
+import { useRecoilState } from 'recoil'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import kunstayLogo from '../assets/images/kunstayLogo.png'
 import {
+  CBadge,
   CCloseButton,
   CSidebar,
   CSidebarBrand,
@@ -11,7 +13,7 @@ import {
   CSidebarToggler,
 } from '@coreui/react-pro'
 import { AppSidebarNav } from './AppSidebarNav'
-
+import { isLocalAtom } from '../atom'
 // sidebar nav config
 import navigation from '../_nav'
 
@@ -19,6 +21,7 @@ const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const [isLocal] = useRecoilState(isLocalAtom)
 
   return (
     <CSidebar
@@ -31,9 +34,13 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CSidebarHeader className="border-bottom justify-content-center">
+      <CSidebarHeader className="border-bottom justify-content-center ">
         <CSidebarBrand as={NavLink} to="/">
           <img src={kunstayLogo} />
+
+          <CBadge color="danger" style={{ display: 'absolute', top: '10px', right: '10px' }} shape="rounded-pill">
+            Staging
+          </CBadge>
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"
