@@ -37,10 +37,11 @@ const AppSidebar = () => {
       <CSidebarHeader className="border-bottom justify-content-center ">
         <CSidebarBrand as={NavLink} to="/">
           <img src={kunstayLogo} />
-
-          <CBadge color="danger" style={{ display: 'absolute', top: '10px', right: '10px' }} shape="rounded-pill">
-            Staging
-          </CBadge>
+          {isLocal && (
+            <CBadge color="danger" style={{ display: 'absolute', top: '10px', right: '10px' }} shape="rounded-pill">
+              Staging
+            </CBadge>
+          )}
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"
