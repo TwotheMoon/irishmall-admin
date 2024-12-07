@@ -9,7 +9,7 @@ RUN npm run build
 FROM node:18-alpine as production
 WORKDIR /app
 
-# ENV NODE_ENV=development
+LABEL com.centurylinklabs.watchtower.enable=true
 
 # install server for static file hosting
 RUN npm install -g serve
