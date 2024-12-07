@@ -5,11 +5,6 @@ import CommaConversion from './CommaConversion'
 import SearchKeywordTool from './SearchKeywordTool'
 
 const Home = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('와치타워 실행')
-    }, 2000)
-  }, [])
 
   return (
     <>
