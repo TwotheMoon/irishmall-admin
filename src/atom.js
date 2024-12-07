@@ -2,7 +2,7 @@ import { atom } from 'recoil'
 
 export const isLocalAtom = atom({
   key: 'isLocalKey',
-  default: false,
+  default: process.env.NODE_ENV  === 'development',
 })
 
 export const copyAlertAtom = atom({

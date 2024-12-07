@@ -1,27 +1,27 @@
-import React from 'react'
-import axios from 'axios'
-import { CAccordionBody, CAccordionHeader, CAccordionItem, CButton } from '@coreui/react-pro'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
-import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api'
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
+import React from 'react';
+import axios from 'axios';
+import { CAccordionBody, CAccordionHeader, CAccordionItem, CButton } from '@coreui/react-pro';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
+import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api';
+import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils';
 
 const DevSetting = () => {
-  const setShowModal = useSetRecoilState(showModalAtom)
-  const isLocal = useRecoilValue(isLocalAtom)
-  const setIsLoading = useSetRecoilState(isLoadingAtom)
+  const setShowModal = useSetRecoilState(showModalAtom);
+  const isLocal = useRecoilValue(isLocalAtom);
+  const setIsLoading = useSetRecoilState(isLoadingAtom);
 
   const updateNaverCate = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await axios.post(
         `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${updateNaverAllCateApiEP}`,
-      )
-      commonResModal(res, '네이버 카테고리 업데이트', setIsLoading, setShowModal)
+      );
+      commonResModal(res, '네이버 카테고리 업데이트', setIsLoading, setShowModal);
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(setIsLoading, setShowModal, error);
     }
-  }
+  };
 
   return (
     <>
@@ -45,7 +45,7 @@ const DevSetting = () => {
         </CAccordionBody>
       </CAccordionItem>
     </>
-  )
-}
+  );
+};
 
-export default DevSetting
+export default DevSetting;

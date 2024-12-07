@@ -50,7 +50,8 @@
     "react-router-dom": "^6.28.0",
     "recoil": "^0.7.7",
     "redux": "5.0.1",
-    "simplebar-react": "^3.2.6"
+    "simplebar-react": "^3.2.6",
+    "sweetalert2": "^11.14.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.3",

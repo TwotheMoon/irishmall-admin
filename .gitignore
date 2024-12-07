@@ -4,11 +4,14 @@
 /node_modules
 package-lock.json
 yarn.lock
+/Dockerfile
+/nginx
 
 # testing
 /coverage
 
 # production
+/dist
 /build
 
 # misc
