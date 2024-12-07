@@ -3,7 +3,7 @@ import axios from 'axios'
 axios.defaults.withCredentials = true
 
 // 서버 기본 api url
-export const apiServerBaseUrl = 'https://node.moondb.co.kr'
+export const apiServerBaseUrl = 'http://md-api-server:4000'
 export const localServerBaseUrl = 'http://localhost:4000'
 export const healthCkEP = '/health'
 export const getTokenApiEP = '/getToken'
