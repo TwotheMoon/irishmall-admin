@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import axios from 'axios'
 import { useDropzone } from 'react-dropzone'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { localServerBaseUrl, apiServerBaseUrl, uploadMyCateExcelApiEP } from '../../../api'
+import { localServerBaseUrl, apiServerBaseUrl, uploadMyCateExcelApiEP } from '../../api'
 import { CIcon } from '@coreui/icons-react'
 import { cilFileExcel } from '@coreui/icons-pro'
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
+import { commonErrorModal, commonReqModal, commonResModal } from '../../utils'
 import { CButton } from '@coreui/react-pro'
 
 const baseStyle = {
@@ -81,8 +81,7 @@ function StyledDropzone({ setReFetch }) {
       setAcceptedFiles([])
       setReFetch(Date.now())
     } catch (error) {
-      console.log(error)
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(setIsLoading, setShowModal, error.response.data)
       setAcceptedFiles([])
     }
   }

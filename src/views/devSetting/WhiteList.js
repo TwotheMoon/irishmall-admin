@@ -8,7 +8,7 @@ import {
   CSmartTable,
 } from '@coreui/react-pro'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom'
 import {
   apiServerBaseUrl,
   createWhiteListApiEp,
@@ -16,9 +16,9 @@ import {
   localServerBaseUrl,
   readWhiteListApiEp,
   updateWhiteListApiEp,
-} from '../../../api'
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils'
-import { CommonModal } from '../../../layout/Modal'
+} from '../../api'
+import { commonErrorModal, commonReqModal, commonResModal } from '../../utils'
+import { CommonModal } from '../../layout/Modal'
 
 const WhiteList = () => {
   const isLocal = useRecoilValue(isLocalAtom)
@@ -69,7 +69,7 @@ const WhiteList = () => {
       setItems(transformedData)
       setIsLoading(false)
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(setIsLoading, setShowModal, error.response.data)
     }
   }
 
@@ -101,10 +101,10 @@ const WhiteList = () => {
         )
         commonResModal(res, '화이트리스트 수정', setIsLoading, setShowModal)
       } else {
-        commonErrorModal(setIsLoading, setShowModal, error)
+        commonErrorModal(setIsLoading, setShowModal, error.response.data)
       }
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(setIsLoading, setShowModal, error.response.data)
     } finally {
       setInputValues({ id: '', domain: '', desc: '' })
       setOnConfirmType('')
@@ -126,17 +126,17 @@ const WhiteList = () => {
 
       getData()
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(setIsLoading, setShowModal, error.response.data)
     }
   }
 
   useEffect(() => {
     try {
-      ;(async () => {
+      ; (async () => {
         await getData()
       })()
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data)
     }
   }, [])
 

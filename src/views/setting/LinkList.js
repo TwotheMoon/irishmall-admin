@@ -30,7 +30,7 @@ import {
   sellerfriendUrl,
   sellporterAdminUrl,
   zentradeUrl,
-} from '../../../api'
+} from '../../api'
 import CIcon from '@coreui/icons-react'
 import { cilTruck, cibNintendo, cilCode, cilEqualizer } from '@coreui/icons'
 

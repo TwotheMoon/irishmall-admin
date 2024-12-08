@@ -2,7 +2,7 @@ import { atom } from 'recoil'
 
 export const isLocalAtom = atom({
   key: 'isLocalKey',
-  default: process.env.NODE_ENV  === 'development',
+  default: process.env.NODE_ENV === 'development',
 })
 
 export const copyAlertAtom = atom({
@@ -24,7 +24,25 @@ export const showModalAtom = atom({
     visible: false,
     title: '',
     desc: '',
-    onClick: () => {},
+    onClick: () => { },
     isCancelVisible: true,
   },
+})
+
+// 헤더 사이드바 트리거
+export const sidebarShowAtom = atom({
+  key: 'sidebarShowAtom',
+  default: true,
+})
+
+// 사이드바 펼치기 트리거
+export const sidebarUnfoldableAtom = atom({
+  key: 'sidebarUnfoldableAtom',
+  default: false,
+})
+
+// 테마 트리거
+export const themeAtom = atom({
+  key: 'themeAtom',
+  default: 'dark',
 })

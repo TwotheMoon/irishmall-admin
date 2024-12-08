@@ -1,10 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom'
-import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from '../../../api'
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom'
+import { apiServerBaseUrl, getAllMyCateApiEP, localServerBaseUrl } from '../../api'
 import { CAccordionBody, CAccordionHeader, CAccordionItem, CSmartTable } from '@coreui/react-pro'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { commonErrorModal } from '../../../utils'
+import { commonErrorModal } from '../../utils'
 
 const MyCateTable = ({ reFetch }) => {
   const isLocal = useRecoilValue(isLocalAtom)
@@ -94,14 +94,15 @@ const MyCateTable = ({ reFetch }) => {
         _cellProps: { all: { className: 'text-center' }, cateName: { className: 'text-start' } },
       }))
       setItems(transformedData)
-      setIsLoading(false)
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error)
+      commonErrorModal(() => { }, setShowModal, error.response.data)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await getData()
     })()
   }, [reFetch])

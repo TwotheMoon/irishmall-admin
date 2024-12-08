@@ -7,7 +7,7 @@ import {
   CCardBody,
   CCardHeader,
 } from '@coreui/react-pro'
-import StyledDropzone from '../setting/StyledDropzone'
+import StyledDropzone from './StyledDropzone'
 
 const MyCateUpdate = ({ setReFetch }) => {
   return (

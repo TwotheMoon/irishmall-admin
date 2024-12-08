@@ -36,8 +36,8 @@ export const commonReqModal = (
   type = 'default',
   title,
   desc = '',
-  setShowModal = () => {},
-  onClick = () => {},
+  setShowModal = () => { },
+  onClick = () => { },
 ) => {
   setShowModal({
     type,
@@ -50,7 +50,7 @@ export const commonReqModal = (
 }
 
 // 공통 모달 (api 리스폰스)
-export const commonResModal = (res, title, setIsLoading = () => {}, setShowModal = () => {}) => {
+export const commonResModal = (res, title, setIsLoading = () => { }, setShowModal = () => { }) => {
   if (res.data.status === 200 || res.data.status === 500) {
     setIsLoading(false)
 
@@ -74,7 +74,7 @@ export const commonCloseModal = (setShowModal) => {
     visible: false,
     title: '',
     desc: '',
-    onClick: () => {},
+    onClick: () => { },
     isCancelVisible: false,
   })
 }
@@ -82,11 +82,18 @@ export const commonCloseModal = (setShowModal) => {
 export const commonErrorModal = (setIsLoading, setShowModal, error) => {
   setIsLoading(false)
 
+  let errorMessage = '관리자에게 문의해주세요.'
+  if (error?.details) {
+    errorMessage = error.details
+  } else if (error?.message) {
+    errorMessage = error.message
+  }
+
   setShowModal({
     type: 'error',
     visible: true,
     title: '오류가 발생했습니다.',
-    desc: error?.message || '관리자에게 문의해주세요.',
+    desc: errorMessage,
     onClick: () => {
       commonCloseModal(setShowModal)
     },

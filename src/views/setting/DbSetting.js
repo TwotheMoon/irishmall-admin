@@ -2,9 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import { CAccordionBody, CAccordionHeader, CAccordionItem, CButton } from '@coreui/react-pro';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../../atom';
-import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../../api';
-import { commonErrorModal, commonReqModal, commonResModal } from '../../../utils';
+import { isLoadingAtom, isLocalAtom, showModalAtom } from '../../atom';
+import { apiServerBaseUrl, localServerBaseUrl, updateNaverAllCateApiEP } from '../../api';
+import { commonErrorModal, commonReqModal, commonResModal } from '../../utils';
 
 const DevSetting = () => {
   const setShowModal = useSetRecoilState(showModalAtom);
@@ -19,7 +19,9 @@ const DevSetting = () => {
       );
       commonResModal(res, '네이버 카테고리 업데이트', setIsLoading, setShowModal);
     } catch (error) {
-      commonErrorModal(setIsLoading, setShowModal, error);
+      commonErrorModal(() => { }, setShowModal, error.response.data)
+    } finally {
+      setIsLoading(false)
     }
   };
 

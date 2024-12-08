@@ -49,3 +49,6 @@ export const gabiaUrl = 'https://www.gabia.com/'
 export const naverCommerceDocUrl = 'https://apicenter.commerce.naver.com/ko/basic/commerce-api'
 export const naverOpenApiDocUrl = 'https://developers.naver.com/products/service-api/datalab/datalab.md'
 export const coreUiFreeviewUrl = 'https://coreui.io/demos/react/5.3/default/?theme=dark#/dashboard'
+
+// ZEP 메타버스
+export const zepOfficeUrl = "https://zep.us/play/5r317Q";

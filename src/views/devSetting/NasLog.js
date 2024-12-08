@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { apiServerBaseUrl, getNasLogApiEP, localServerBaseUrl } from '../../../api'
+import { apiServerBaseUrl, getNasLogApiEP, localServerBaseUrl } from '../../api'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   CAccordionBody,
@@ -10,8 +10,8 @@ import {
   CFormLabel,
   CVirtualScroller,
 } from '@coreui/react-pro'
-import { isLocalAtom, showModalAtom } from '../../../atom'
-import { commonErrorModal, formattedUnixToDate } from '../../../utils'
+import { isLocalAtom, showModalAtom } from '../../atom'
+import { commonErrorModal, formattedUnixToDate } from '../../utils'
 import CIcon from '@coreui/icons-react'
 import { cilReload } from '@coreui/icons'
 
@@ -58,12 +58,12 @@ const NasLog = () => {
           .reverse(),
       })
     } catch (error) {
-      commonErrorModal(() => {}, setShowModal, error)
+      commonErrorModal(() => { }, setShowModal, error.response.data)
     }
   }
 
   useEffect(() => {
-    ;(async () => await getNasLog())()
+    ; (async () => await getNasLog())()
   }, [])
 
   return (
