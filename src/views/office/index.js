@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { zepOfficeUrl } from "../../api"
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { sidebarShowAtom } from '../../atom'
 
 export const Office = () => {
-  const sidebarShow = useRecoilValue(sidebarShowAtom)
+  const [sidebarShow, setSidebarShow] = useRecoilState(sidebarShowAtom)
 
+  useEffect(() => {
+    setSidebarShow(false);
+  }, [])
+  
   return (
     <div style={{ 
       height: 'calc(100vh - 113px)', 
