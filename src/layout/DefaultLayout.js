@@ -39,7 +39,6 @@ const DefaultLayout = () => {
         <AppHeader />
         <div className="body flex-grow-1">
           <AppContent />
-
           {/* 모달 */}
           {showModal?.type === 'default' || showModal?.type === 'error' ? <CommonModal /> : null}
         </div>

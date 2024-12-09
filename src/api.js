@@ -44,11 +44,11 @@ export const naverSearchAdUrl = 'https://searchad.naver.com/my-screen'
 export const mongoExpressUrl = 'http://125.133.33.2:8081'
 export const netlifyServer = 'https://app.netlify.com/teams/twothemoon/sites'
 export const cloudTypeServerUrl = 'https://app.cloudtype.io/@dlaguddh1/irishmall-api-server:main'
-export const nasMonitor = 'http://125.133.33.2:3033/d/TIcL1_ezk22/synology-dashboard?orgId=1&refresh=1m'
+export const nasMonitor ='http://125.133.33.2:3033/d/TIcL1_ezk22/synology-dashboard?orgId=1&refresh=1m'
 export const gabiaUrl = 'https://www.gabia.com/'
 export const naverCommerceDocUrl = 'https://apicenter.commerce.naver.com/ko/basic/commerce-api'
 export const naverOpenApiDocUrl = 'https://developers.naver.com/products/service-api/datalab/datalab.md'
 export const coreUiFreeviewUrl = 'https://coreui.io/demos/react/5.3/default/?theme=dark#/dashboard'
 
 // ZEP 메타버스
-export const zepOfficeUrl = "https://zep.us/play/5r317Q";
+export const zepOfficeUrl = 'https://zep.us/play/VqZvQv'
