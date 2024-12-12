@@ -199,7 +199,8 @@ function StyledDropzone() {
   const hasFiles = acceptedFiles.length > 0
 
   const handleDownload = () => {
-    window.open(downloadUrl, '_blank');
+    console.log(downloadUrl);
+    window.location.href = downloadUrl;
   }
 
   return (
