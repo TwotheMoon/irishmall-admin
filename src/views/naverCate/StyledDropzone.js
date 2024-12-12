@@ -198,6 +198,10 @@ function StyledDropzone() {
 
   const hasFiles = acceptedFiles.length > 0
 
+  const handleDownload = () => {
+    window.open(downloadUrl, '_blank');
+  }
+
   return (
     <div className="container">
       <div className="mb-4 d-flex align-items-center gap-5">
@@ -282,9 +286,7 @@ function StyledDropzone() {
                 <div>파일명: {fileName}</div>
                 <div>필터링된 상품 수: {filteredCount}</div>
               </div>
-              <a href={downloadUrl} download>
-                <CButton color="success">다운로드</CButton>
-              </a>
+              <CButton color="success" onClick={handleDownload}>다운로드</CButton>
             </div>
             <CButton color="secondary" onClick={resetState}>초기화</CButton>
           </div>
