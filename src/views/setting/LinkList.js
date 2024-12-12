@@ -10,7 +10,6 @@ import {
 } from '@coreui/react-pro'
 import {
   _79domeUrl,
-  cloudTypeServerUrl,
   coreUiFreeviewUrl,
   dometopiaUrl,
   gabiaUrl,
@@ -167,7 +166,7 @@ const LinkList = () => {
               <CButton
                 color="warning"
                 variant="outline"
-                onClick={() => onClickLinkBtn(cloudTypeServerUrl)}
+                onClick={() => onClickLinkBtn('')}
               >
                 백엔드 서버
               </CButton>
