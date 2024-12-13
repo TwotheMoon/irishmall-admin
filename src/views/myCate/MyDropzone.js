@@ -36,7 +36,7 @@ const rejectStyle = {
   borderColor: '#ff1744',
 }
 
-function StyledDropzone({ setReFetch }) {
+function MyDropzone({ setReFetch }) {
   const isLocal = useRecoilValue(isLocalAtom)
   const setIsLoading = useSetRecoilState(isLoadingAtom)
   const setShowModal = useSetRecoilState(showModalAtom)
@@ -136,4 +136,4 @@ function StyledDropzone({ setReFetch }) {
   )
 }
 
-export default StyledDropzone
+export default MyDropzone

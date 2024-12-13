@@ -15,6 +15,8 @@ export const updateNaverAllCateApiEP = '/updateNaverAllCate'
 export const getPopularCateApiEP = '/getPopularCate'
 export const uploadMyCateExcelApiEP = '/uploadMyCateExcel'
 export const uploadNaverCateExcelApiEP = '/uploadNaverCateExcel'
+export const updateNaverCateAttrApiEP = '/updateNaverCateAttr'
+
 // 화이트리스트 url
 export const createWhiteListApiEp = '/createWitelist'
 export const readWhiteListApiEp = '/readeWitelist'
@@ -51,4 +53,4 @@ export const naverOpenApiDocUrl = 'https://developers.naver.com/products/service
 export const coreUiFreeviewUrl = 'https://coreui.io/demos/react/5.3/default/?theme=dark#/dashboard'
 
 // ZEP 메타버스
-export const zepOfficeUrl = 'https://zep.us/edit/1vJ0Rj/VqZvQv'
+export const zepOfficeUrl = 'https://zep.us/play/VqZvQv'

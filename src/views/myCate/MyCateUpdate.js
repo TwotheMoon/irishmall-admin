@@ -7,7 +7,7 @@ import {
   CCardBody,
   CCardHeader,
 } from '@coreui/react-pro'
-import StyledDropzone from './StyledDropzone'
+import MyDropzone from './MyDropzone'
 
 const MyCateUpdate = ({ setReFetch }) => {
   return (
@@ -18,7 +18,7 @@ const MyCateUpdate = ({ setReFetch }) => {
           <CCard className="mt-2">
             <CCardHeader>엑셀 업로드</CCardHeader>
             <CCardBody>
-              <StyledDropzone setReFetch={setReFetch} />
+              <MyDropzone setReFetch={setReFetch} />
             </CCardBody>
           </CCard>
         </CAccordionBody>

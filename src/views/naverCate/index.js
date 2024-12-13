@@ -1,6 +1,6 @@
 import { CAccordion } from "@coreui/react-pro";
 import React from "react";
-import NaverAttributes from "./naverAttributes";
+import NaverAttributes from "./NaverAttributes";
 import DbSetting from "./DbSetting";
 
 const NaverCate = () => {

@@ -36,14 +36,14 @@ const rejectStyle = {
   borderColor: '#ff1744',
 }
 
-function StyledDropzone() {
+function NaverDropzone() {
   const isLocal = useRecoilValue(isLocalAtom)
   const setIsLoading = useSetRecoilState(isLoadingAtom)
   const setShowModal = useSetRecoilState(showModalAtom)
   const [acceptedFiles, setAcceptedFiles] = useState([])
   const [startRow, setStartRow] = useState('');
   const [endRow, setEndRow] = useState('');
-  const [switchStatus, setSwitchStatus] = useState(false);
+  const [switchStatus, setSwitchStatus] = useState(true);
   const [downloadUrl, setDownloadUrl] = useState('');
   const [fileName, setFileName] = useState('');
   const [filteredCount, setFilteredCount] = useState(0);
@@ -297,4 +297,4 @@ function StyledDropzone() {
   )
 }
 
-export default StyledDropzone
+export default NaverDropzone
