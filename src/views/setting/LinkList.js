@@ -164,13 +164,6 @@ const LinkList = () => {
                 프론트엔드 서버
               </CButton>
               <CButton
-                color="warning"
-                variant="outline"
-                onClick={() => onClickLinkBtn('')}
-              >
-                백엔드 서버
-              </CButton>
-              <CButton
                 color="info"
                 variant="outline"
                 onClick={() => onClickLinkBtn(mongoExpressUrl)}

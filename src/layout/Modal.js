@@ -31,7 +31,11 @@ export const CommonModal = ({ inputValues, onInputChange, onConfirm }) => {
       </CModalHeader>
 
       <CModalBody>
-        {modalType === 'default' && showModal?.desc}
+        {modalType === 'default' && showModal?.desc.includes("<br />") ? (
+          <div dangerouslySetInnerHTML={{ __html: showModal?.desc }} />
+        ) : (
+          <p>{showModal?.desc}</p>
+        )}
         {modalType === 'error' && `오류: ${showModal?.desc}`}
         {modalType === 'whitelist' && (
           <>
