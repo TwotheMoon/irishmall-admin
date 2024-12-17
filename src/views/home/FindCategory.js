@@ -83,7 +83,10 @@ const FindCategory = () => {
                 type="text"
                 size="sm"
                 placeholder="키워드 입력"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  searchInputRef.current.value = ''
+                }}
                 onKeyUp={(e) => e.preventDefault()}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {

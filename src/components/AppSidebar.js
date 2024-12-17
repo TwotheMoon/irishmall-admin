@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import kunstayLogo from '../assets/images/kunstayLogo.png'
 import {
@@ -35,7 +35,7 @@ const AppSidebar = () => {
         <CSidebarBrand as={NavLink} to="/">
           <img src={kunstayLogo} />
           {isLocal && (
-            <CBadge color="danger" style={{ display: 'absolute', top: '10px', right: '10px' }} shape="rounded-pill">
+            <CBadge as={NavLink} to="/testArea" color="danger" style={{ display: 'absolute', top: '10px', right: '10px', cursor: 'pointer', zIndex: '9999' }} shape="rounded-pill">
               DevMode
             </CBadge>
           )}
