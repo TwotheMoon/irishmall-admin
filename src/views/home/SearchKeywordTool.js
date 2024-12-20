@@ -51,8 +51,9 @@ const SearchKeywordTool = () => {
       children:[
         {
           key:"addBtn",
-          label:"",
-          sorter: false
+          label: `${selectedRelKeywords?.length} 추가됨`,
+          sorter: false,
+          _style: { textAlign: 'center', fontSize: "14px"},
         },
       ]
     },
