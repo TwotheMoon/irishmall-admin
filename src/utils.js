@@ -10,6 +10,19 @@ export const handleCopy = (ref) => {
   }
 }
 
+// 콤마 컨버전
+export const commaConversionFn = (keywords) => {
+  if (!keywords) return '';
+
+  const conversionedWords = keywords
+    .split(/[\n,]+/)
+    .map((word) => word.trim())
+    .filter(Boolean)
+    .join(',')
+
+  return conversionedWords;
+}
+
 // 유닉스 시간 변환
 export const formattedUnixToDate = (date) => {
   const options = {

@@ -20,3 +20,24 @@
 .rotate-on-hover:hover .rotate-icon {
   animation: rotate360 0.7s ease-in-out;
 }
+
+.form-multi-select-indicator,
+.form-multi-select-dropdown {
+    display: none !important;
+}
+
+// 키워드 도구 > 포함할단어, 제외할단어 셀렉터 스타일
+.search-type-inputs_keyword,
+.search-type-inputs_include,
+.search-type-inputs_exclude{
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.search-type-inputs .form-multi-select-search:placeholder-shown{
+  font-size: 15px !important;
+}
+
+// 키워드 도구 > 포함할단어, 제외할단어 셀렉터 태그 스타일
+.search-type-inputs .form-multi-select-selection-tags{
+  overflow-x: auto !important;
+}

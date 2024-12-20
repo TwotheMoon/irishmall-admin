@@ -7,10 +7,9 @@ import {
   CButton,
   CForm,
   CFormLabel,
-  CFormSwitch,
   CFormTextarea,
-  CTooltip,
 } from '@coreui/react-pro'
+import { commaConversionFn } from '../../utils'
 
 const CommaConversion = () => {
   const txArea1Ref = useRef()
@@ -20,7 +19,7 @@ const CommaConversion = () => {
   const [showDupAlert, setShowDupAlert] = useState(false)
   const [duplicateWordCount, setDuplicateWordCount] = useState(0)
   const [duplicateState, setDuplicateState] = useState(false)
-  const [switchStatus, setSwitchStatus] = useState(false)
+
 
   const reset = () => {
     txArea1Ref.current.value = ''
@@ -30,15 +29,11 @@ const CommaConversion = () => {
   // 키워드 변환 정규식
   const conversion = () => {
     const keywords = txArea1Ref.current.value
-    const conversionedWords = keywords
-      .split(/[\n,]+/)
-      .map((word) => word.trim())
-      .filter(Boolean)
-      .join(',')
+    const conversionedWords = commaConversionFn(keywords);
 
     txArea2Ref.current.value = conversionedWords
 
-    if (switchStatus && conversionedWords !== '') {
+    if (conversionedWords !== '') {
       navigator.clipboard.writeText(conversionedWords)
     }
   }
@@ -101,29 +96,15 @@ const CommaConversion = () => {
 
       if (separatorType == '\n') {
         txArea1Ref.current.value = Array.from(seen).join('\n')
-        txArea2Ref.current.value = Array.from(seen).join(',')
+        txArea2Ref.current.value = Array.from(seen).join(',').replace(/,\s*$/, '')
       } else if (separatorType == ',') {
         txArea1Ref.current.value = Array.from(seen).join(',')
         txArea2Ref.current.value = Array.from(seen).join(',')
       }
     }
 
-    if (switchStatus) {
-      navigator.clipboard.writeText(txArea2Ref.current.value)
-    }
-
     seen.clear()
     duplicateWords.clear()
-  }
-
-  // 키워드 자동 변환
-  const autoTransferKeyword = (e) => {
-    setSwitchStatus((prev) => !prev)
-
-    if (e.target.checked) {
-      conversion()
-      navigator.clipboard.writeText(txArea2Ref.current.value)
-    }
   }
 
   return (
@@ -167,40 +148,24 @@ const CommaConversion = () => {
                 id="textArea1"
                 ref={txArea1Ref}
                 style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
-                onChange={switchStatus ? conversion : null}
               ></CFormTextarea>
             </div>
             <div className="px-3 d-flex flex-column align-items-center gap-4">
-              <div style={{ width: '75px' }}>
-                <CFormLabel className=" w-100 text-center">자동변환</CFormLabel>
-                <CTooltip content="활성화시, 자동 키워드 변환 및 복사가 됩니다." placement="bottom">
-                  <CFormSwitch
-                    className="mb-3"
-                    size="xl"
-                    id="automationSwitch"
-                    style={{ width: '65px' }}
-                    checked={switchStatus}
-                    onChange={autoTransferKeyword}
-                  />
-                </CTooltip>
-              </div>
               <CButton
                 as="input"
                 type="button"
                 color="primary"
                 value="변환"
-                style={{ minWidth: '75px', opacity: switchStatus ? '0' : '1' }}
+                style={{ minWidth: '75px' }}
                 onClick={conversion}
-                disabled={switchStatus}
               />
               <CButton
                 as="input"
                 type="button"
                 color="secondary"
                 value="초기화"
-                style={{ minWidth: '75px', opacity: switchStatus ? '0' : '1' }}
+                style={{ minWidth: '75px' }}
                 onClick={reset}
-                disabled={switchStatus}
               />
             </div>
             <div className="mb-3 w-100">

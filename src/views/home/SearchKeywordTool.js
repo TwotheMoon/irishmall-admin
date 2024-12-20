@@ -1,90 +1,484 @@
 import React, { useEffect, useRef, useState } from 'react'
+import axios from 'axios';
 import {
   CAccordionBody,
   CAccordionHeader,
   CAccordionItem,
+  CAlert,
   CButton,
   CCard,
-  CFormInput,
-  CInputGroup,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
+  CCardBody,
+  CFormLabel,
+  CFormTextarea,
+  CMultiSelect,
+  CSmartTable,
 } from '@coreui/react-pro'
-import naverIdImgPath from '../../assets/images/naverIdImg.png'
+import CIcon from '@coreui/icons-react'
+import { cilSearch, cilPlus, cilMinus } from '@coreui/icons'
+import Draggable from 'react-draggable';
+import { isLocalAtom } from '../../atom';
+import { useRecoilValue } from 'recoil';
+import { apiServerBaseUrl, getAdKeywordApiEp, localServerBaseUrl } from '../../api';
+
+import { commaConversionFn } from '../../utils';
 
 const SearchKeywordTool = () => {
-  const loginInputRef = useRef()
+  const isLocal = useRecoilValue(isLocalAtom);
+  const [searchKeywords, setSearchKeywords] = useState([]);
+  const [includeWords, setIncludeWords] = useState([]);
+  const [excludeWords, setExcludeWords] = useState([]);
+  const [originalItems, setOriginalItems] = useState([]);
+  const [printItems, setPrintItems] = useState([]);
+  const [selectedRelKeywords, setSelectedRelKeywords] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showCard, setShowCard] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
+  const txArea1Ref = useRef()
+  // 키워드 입력시 5개 유효성 검사
+  const handleSearchKeywords = (selectedOptions) => {
+    if(selectedOptions.length > 5) return;
+    setSearchKeywords(selectedOptions);
+  };
 
-  const [showModal, setShowModal] = useState(false)
-  const [keywordUrl, setKeywordUrl] = useState()
-  let newNaverId
+  // 데이터 테이블 컬럼
+  const columns = [
+    {
+      group: "추가",
+      label: "",
+      _props: {
+        style: { textAlign: 'center', width: "100px", paddingBottom: "20px" },
+      },
+      children:[
+        {
+          key:"addBtn",
+          label:"",
+          sorter: false
+        },
+      ]
+    },
+    {
+      group: "연관키워드",
+      _props: {
+        style: { textAlign: 'center', width: "20%", paddingBottom: "20px" },
+      },
+      children:[
+        {
+          key:"relKeyword",
+          label:"",
+          filter: true,
+          sorter: true,
+        },
+      ]
+    },
+    {
+      group: "월간검색수",
+      _props: {
+        style: { textAlign: 'center', paddingBottom: "20px" }
+      },
+      children: [
+        {
+          key: "monthlyPcQcCnt",
+          label: "PC",
+          _style: { textAlign: 'center', width: '100px' }
+        },
+        {
+          key: "monthlyMobileQcCnt",
+          label: "모바일",
+          _style: { textAlign: 'center', width: '100px' }
+        }
+      ]
+    },
+    {
+      group: "월평균클릭수",
+      _props: {
+        style: { textAlign: 'center', paddingBottom: "20px" }
+      },
+      children: [
+        {
+          key: "monthlyAvePcClkCnt",
+          label: "PC",
+           _style: { textAlign: 'center', width: '100px' }
+        },
+        {
+          key: "monthlyAveMobileClkCnt",
+          label: "모바일",
+          _style: { textAlign: 'center', width: '100px' }
+        }
+      ]
+    },      
+    {
+      group: "월평균클릭률",
+      _props: {
+        style: { textAlign: 'center', paddingBottom: "20px" }
+      },
+      children: [
+        {
+          key: "monthlyAvePcCtr",
+          label: "PC",
+          _style: { textAlign: 'center', width: '100px' }
+        },
+        {
+          key: "monthlyAveMobileCtr",
+          label: "모바일",
+          _style: { textAlign: 'center', width: '100px' }
+        }
+      ]
+    },
+    {
+      group: "경쟁정도",
+      _props: {
+        style: { textAlign: 'center', width: "100px", paddingBottom: "20px"},
+      },
+      children:[
+        {
+          key:"compIdx",
+          label:"",
+        },
+      ]
+    },
+    {
+      group: "월평균노출광고수",
+      _props: {
+        style: { textAlign: 'center', width: "100px", paddingBottom: "8px" },
+      },
+      children:[
+        {
+          key:"plAvgDepth",
+          label:""
+        },
+      ]
+    },
+  ]
 
-  // 네이버 광고 아이디 입력
-  const setNaverId = () => {
-    if (!loginInputRef.current.value) {
-      alert('ID 번호를 입력해주세요.')
-    } else {
-      newNaverId = loginInputRef.current.value
-      localStorage.setItem('naverId', newNaverId)
-      alert('로그인 되었습니다.')
-      window.location.reload()
+  // 키워드 검색
+  const handleSearch = async () => {
+  
+    const keywords = searchKeywords.map(item => item.value).join(',').replaceAll("-", "");
+
+    try {
+      setTableLoading(true);
+      const res = await (await axios.post(
+        `${isLocal ? localServerBaseUrl : apiServerBaseUrl}${getAdKeywordApiEp}`,
+        {
+          data: keywords,
+        },
+      )).data.data
+
+      const transformedData = res.map((item) => ({
+        relKeyword: item.relKeyword,
+        monthlyPcQcCnt: item.monthlyPcQcCnt == "< 10" ? 0 : item.monthlyPcQcCnt,
+        monthlyMobileQcCnt: item.monthlyMobileQcCnt == "< 10" ? 0 : item.monthlyMobileQcCnt,
+        monthlyAvePcClkCnt: item.monthlyAvePcClkCnt,
+        monthlyAveMobileClkCnt: item.monthlyAveMobileClkCnt,
+        monthlyAvePcCtr: item.monthlyAvePcCtr,
+        monthlyAveMobileCtr: item.monthlyAveMobileCtr,
+        compIdx: item.compIdx,
+        plAvgDepth: item.plAvgDepth,
+        _cellProps: { 
+          all: { className: 'text-end' },
+          addBtn: { className: 'text-center' },
+          relKeyword: { className: 'text-start' },
+          compIdx: { className: 'text-center' },
+          plAvgDepth: { className: 'text-end' }
+        },
+      }))
+
+      if(includeWords.length > 0 || excludeWords.length > 0){
+        applyFilters(transformedData);
+      } else {
+        setPrintItems(transformedData);
+        setOriginalItems(transformedData);
+      }
+      setTableLoading(false);
+    } catch (error) {
+      console.log(error);
+      setTableLoading(false);
     }
   }
 
-  // 키워드 도구 아이프레임 최초 로그인
-  useEffect(() => {
-    let naverId
-    naverId = localStorage.getItem('naverId')
-    if (!naverId || naverId == null) {
-      setShowModal(true)
+  const applyFilters = (transformedData) => {
+    let filteredItems;
+    if(transformedData){
+      filteredItems = transformedData;
     } else {
-      const createUrl = `https://manage.searchad.naver.com/customers/${naverId}/tool/keyword-planner`
-      setKeywordUrl(createUrl)
+      filteredItems = originalItems;
     }
-  })
+
+    if (includeWords.length > 0) {
+      filteredItems = filteredItems.filter(item =>
+        includeWords.map(word => word.value.replaceAll("-", "")).some(includeWord =>
+          item.relKeyword.replaceAll("-", "").includes(includeWord)
+        )
+      );
+    }
+
+    if (excludeWords.length > 0) {
+      filteredItems = filteredItems.filter(item =>
+        !excludeWords.map(word => word.value.replaceAll("-", "")).some(excludeWord =>
+          item.relKeyword.replaceAll("-", "").includes(excludeWord)
+        )
+      );
+    }
+
+    setPrintItems(filteredItems);
+  };
+
+  const filterIncludeWord = async (selectedOptions) => {
+    setIncludeWords(selectedOptions);
+    applyFilters();
+  };
+
+  const filterExcludeWord = async (selectedOptions) => {
+    setExcludeWords(selectedOptions);
+    applyFilters();
+  };
+  
+  // 키워드 변환 정규식
+  const conversion = () => {
+    const keywords = txArea1Ref.current.value
+    const conversionedWords = commaConversionFn(keywords);
+
+    if (conversionedWords !== '') {
+      navigator.clipboard.writeText(conversionedWords)
+    }
+  }
+
+  // 변환된 키워드 복사
+  const handleTextAreaClick = () => {
+    if (txArea1Ref.current && txArea1Ref.current.value !== '') {
+      txArea1Ref.current.select()
+
+      navigator.clipboard.writeText(txArea1Ref.current.value)
+
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false)
+      }, 1500)
+    }
+  }
+
+  // 필터 적용
+  useEffect(() => {
+    applyFilters();
+  }, [includeWords, excludeWords])
+
+  // 선택된 키워드 변환
+  useEffect(() => {
+    if (selectedRelKeywords && txArea1Ref.current) {
+      txArea1Ref.current.value = selectedRelKeywords;
+      conversion();
+    }
+  }, [selectedRelKeywords]);
+
   return (
     <>
       <CAccordionItem itemKey={1} className="mb-4">
-        <CAccordionHeader className="w-100">키워드 검색 툴</CAccordionHeader>
+        <CAccordionHeader className="w-100">키워드 도구</CAccordionHeader>
         <CAccordionBody>
-          <CCard className="w-100 h-100 mt-4">
-            <div className="w-100 h-100">
-              <iframe src={keywordUrl} className="w-100" style={{ minHeight: '1000px' }}></iframe>
+          {/* 검색어 필터 */}
+          <div className='d-flex gap-4 position-relative'>
+            <div className="d-flex flex-column gap-3 w-50">
+              <CFormLabel htmlFor="textArea1">
+                  키워드 검색
+              </CFormLabel>
+              <div className='d-flex gap-2'>
+                <CIcon icon={cilSearch} style={{width: "20px"}} customClassName="nav-icon" />
+                <CMultiSelect 
+                  options={searchKeywords}
+                  className='search-type-inputs_keyword'
+                  placeholder='키워드 입력 (최대 5개)'
+                  optionsStyle="text"
+                  selectionType="tags"
+                  searchable={false}
+                  allowCreateOptions
+                  onChange={(selectedOptions) => handleSearchKeywords(selectedOptions)}
+                  optionsTemplate={option => option.label}
+                />
+              </div>
+              <div className='d-flex gap-2'>
+                <CIcon icon={cilPlus} style={{width: "20px"}} customClassName="nav-icon" />
+                <CMultiSelect 
+                  options={includeWords}
+                  className='search-type-inputs_include'
+                  placeholder='포함할 단어'
+                  optionsStyle="text"
+                  selectionType="tags"
+                  searchable={false}
+                  allowCreateOptions
+                  onChange={(selectedOptions) => filterIncludeWord(selectedOptions)}
+                  optionsTemplate={option => option.label}
+                />
+              </div>
+              <div className='d-flex gap-2'>
+                <CIcon icon={cilMinus} style={{width: "20px"}}customClassName="nav-icon" />
+                <CMultiSelect 
+                  options={excludeWords}
+                  className='search-type-inputs_exclude'
+                  placeholder='제외할 단어'
+                  optionsStyle="text"
+                  selectionType="tags"
+                  searchable={false}
+                  allowCreateOptions
+                  onChange={(selectedOptions) => filterExcludeWord(selectedOptions)}
+                  optionsTemplate={option => option.label}
+                />
+              </div>
+              <div className='d-flex gap-3'>
+                <CButton color="primary" onClick={handleSearch}>
+                  조회
+                </CButton>
+                <CButton color="warning" variant='outline'onClick={() => {
+                  setIncludeWords([]);
+                  setExcludeWords([]);
+                  setSearchKeywords([]);
+                  setSelectedRelKeywords([]);
+                  setPrintItems([]);
+                  setOriginalItems([]);
+                  txArea1Ref.current.value = '';
+                  const selectersDom = document.querySelectorAll('.search-type-inputs_keyword, .search-type-inputs_include, .search-type-inputs_exclude');
+                  selectersDom.forEach(selecter => {
+                    const cleanerButton = selecter.querySelector('.form-multi-select-cleaner');
+                    if (cleanerButton) {
+                      cleanerButton.click();
+                    }
+                  });
+                }}>
+                  모두 초기화
+                </CButton>
+                <CButton color="info" variant='outline' onClick={() => {
+                  setIncludeWords([]);
+                  setExcludeWords([]);
+                  const selectersDom = document.querySelectorAll('.search-type-inputs_include, .search-type-inputs_exclude');
+                  selectersDom.forEach(selecter => {
+                    const cleanerButton = selecter.querySelector('.form-multi-select-cleaner');
+                    if (cleanerButton) {
+                      cleanerButton.click();
+                    }
+                  });
+                }}>
+                  필터 초기화
+                </CButton>
+              </div>
             </div>
-          </CCard>
+
+            {/* 키워드 변환 결과 */}
+            <div className="mb-3 w-50">
+              <CFormLabel htmlFor="textArea1">
+                변환된 키워드 &nbsp;
+                <CButton color="primary" variant='outline' onClick={() => setShowCard(true)}>메모장</CButton>
+                   {/* 플로팅 카드 */}
+                    {showCard && (
+                      <Draggable>
+                        <CCard
+                          style={{
+                            position: 'absolute',
+                            top: '0%',
+                            left: '70%',
+                            zIndex: 1000,
+                            cursor: 'move',
+                            width: '600px',
+                            height: '300px',
+                          }}
+                        >
+                          <CCardBody>
+                            <CFormLabel htmlFor="floatingTextArea">메모장</CFormLabel>
+                            <CFormTextarea
+                              id="floatingTextArea"
+                              style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
+                            ></CFormTextarea>
+                            <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
+                              닫기
+                            </CButton>
+                          </CCardBody>
+                        </CCard>
+                      </Draggable>
+                    )}
+              </CFormLabel>
+              <CFormTextarea
+                id="textArea1"
+                ref={txArea1Ref}
+                style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
+                value={selectedRelKeywords}
+                onClick={handleTextAreaClick}
+              ></CFormTextarea>
+            </div>
+            <CAlert
+              color="primary"
+              className="position-absolute end-0"
+              style={{ top: '0px' }}
+              dismissible
+              visible={showAlert}
+              onClose={() => setShowAlert(false)}
+            >
+              복사되었습니다.
+            </CAlert>
+          </div>
+          
+          {/* 데이터 테이블 */}
+          <CSmartTable
+            activePage={1}
+            clickableRows
+            columns={columns}
+            columnSorter={{ resetable: true }}
+            items={printItems}
+            loading={tableLoading}
+            itemsPerPageSelect
+            itemsPerPage={50}
+            itemsPerPageOptions={[5, 10, 20, 50, 100, 200]}
+            pagination
+            noItemsLabel={"검색 결과가 없습니다."}
+            tableProps={{
+              responsive: true,
+              striped: true,
+              hover: true,
+              bordered: true,
+            }}
+            tableBodyProps={{
+              className: 'align-middle',
+            }}
+            scopedColumns={{
+              addBtn: (item) => (
+                <td className='text-center'>
+                  <CButton 
+                    color="primary"
+                    variant={selectedRelKeywords.includes(item.relKeyword) ? 'outline' : ''}
+                    size="sm" 
+                    onClick={() => {
+                      if(selectedRelKeywords.includes(item.relKeyword)) { 
+                        setSelectedRelKeywords(prev => prev.filter(keyword => keyword !== item.relKeyword));
+                      } else {
+                        setSelectedRelKeywords(prev => [...prev, item.relKeyword]);
+                      }
+                    }}>
+                      {selectedRelKeywords.includes(item.relKeyword) ? '취소' : '추가'}
+                  </CButton>
+                </td>
+              ),
+              monthlyPcQcCnt: (item) => (
+                <td className='text-end'>
+                  {item.monthlyPcQcCnt === 0 ? "< 10" : item.monthlyPcQcCnt.toLocaleString()}
+                </td>
+              ),
+              monthlyMobileQcCnt: (item) => (
+                <td className='text-end'>
+                  {item.monthlyMobileQcCnt === 0 ? "< 10" : item.monthlyMobileQcCnt.toLocaleString()}
+                </td>
+              ),
+              monthlyAvePcCtr: (item) => (
+                <td className='text-end'>
+                  {item.monthlyAvePcCtr.toFixed(2)} %
+                </td>
+              ),
+              monthlyAveMobileCtr: (item) => (
+                <td className='text-end'>
+                  {item.monthlyAveMobileCtr.toFixed(2)} %
+                </td>
+              ),
+            }}
+          />
         </CAccordionBody>
       </CAccordionItem>
 
-      {/* 네이버 아이디 모달 */}
-      <CModal visible={showModal} onClose={() => setShowModal(false)}>
-        <CModalHeader>
-          <CModalTitle>로그인</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>네이버 광고 아이디를 입력해 주세요.</p>
-          <img src={naverIdImgPath} className="w-100 mb-4"></img>
-          <CInputGroup className="mb-3">
-            <CFormInput
-              placeholder="ID 번호 입력"
-              aria-label="UserId"
-              aria-describedby="basic-addon1"
-              ref={loginInputRef}
-              required
-            />
-          </CInputGroup>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setShowModal(false)}>
-            닫기
-          </CButton>
-          <CButton color="primary" onClick={() => setNaverId()}>
-            확인
-          </CButton>
-        </CModalFooter>
-      </CModal>
     </>
   )
 }
