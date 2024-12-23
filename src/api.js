@@ -6,7 +6,6 @@ axios.defaults.withCredentials = true
 export const apiServerBaseUrl = 'https://node.moondb.co.kr'
 export const localServerBaseUrl = 'https://node.moondb.co.kr'
 // export const localServerBaseUrl = 'http://localhost:4000'
-// export const localServerBaseUrl = 'https://port-0-irishmall-api-server-stage-m3u68qma5d734195.sel4.cloudtype.app'
 
 export const healthCkEP = '/health'
 export const getTokenApiEP = '/getToken'

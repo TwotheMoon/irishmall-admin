@@ -20,7 +20,6 @@ import { isLocalAtom } from '../../atom';
 import { useRecoilValue } from 'recoil';
 import { apiServerBaseUrl, getAdKeywordApiEp, localServerBaseUrl } from '../../api';
 
-import { commaConversionFn } from '../../utils';
 
 const SearchKeywordTool = () => {
   const isLocal = useRecoilValue(isLocalAtom);
@@ -30,12 +29,19 @@ const SearchKeywordTool = () => {
   const [originalItems, setOriginalItems] = useState([]);
   const [printItems, setPrintItems] = useState([]);
   const [selectedRelKeywords, setSelectedRelKeywords] = useState([]);
+  const [showDupAlert, setShowDupAlert] = useState(false)
+  const [duplicateWordCount, setDuplicateWordCount] = useState(0)
+  const [duplicateState, setDuplicateState] = useState(false)
   const [showAlert, setShowAlert] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
-  const txArea1Ref = useRef()
+  const txArea1Ref = useRef();
+  const memoTxAreaRef = useRef();
+  const searchBtnRef = useRef();
+  
   // 키워드 입력시 5개 유효성 검사
   const handleSearchKeywords = (selectedOptions) => {
+    
     if(selectedOptions.length > 5) return;
     setSearchKeywords(selectedOptions);
   };
@@ -153,7 +159,7 @@ const SearchKeywordTool = () => {
 
   // 키워드 검색
   const handleSearch = async () => {
-  
+    console.log(searchKeywords)
     const keywords = searchKeywords.map(item => item.value).join(',').replaceAll("-", "");
 
     try {
@@ -195,8 +201,9 @@ const SearchKeywordTool = () => {
       console.log(error);
       setTableLoading(false);
     }
-  }
+  };
 
+  // 필터 적용
   const applyFilters = (transformedData) => {
     let filteredItems;
     if(transformedData){
@@ -224,26 +231,18 @@ const SearchKeywordTool = () => {
     setPrintItems(filteredItems);
   };
 
+  // 포함할 단어 필터
   const filterIncludeWord = async (selectedOptions) => {
     setIncludeWords(selectedOptions);
     applyFilters();
   };
 
+  // 제외할 단어 필터
   const filterExcludeWord = async (selectedOptions) => {
     setExcludeWords(selectedOptions);
     applyFilters();
   };
   
-  // 키워드 변환 정규식
-  const conversion = () => {
-    const keywords = txArea1Ref.current.value
-    const conversionedWords = commaConversionFn(keywords);
-
-    if (conversionedWords !== '') {
-      navigator.clipboard.writeText(conversionedWords)
-    }
-  }
-
   // 변환된 키워드 복사
   const handleTextAreaClick = () => {
     if (txArea1Ref.current && txArea1Ref.current.value !== '') {
@@ -256,6 +255,49 @@ const SearchKeywordTool = () => {
         setShowAlert(false)
       }, 1500)
     }
+  };
+
+  // 키워드 중복 검사
+  const checkDuplicate = () => {
+    if (!txArea1Ref.current.value) return
+
+    const words = memoTxAreaRef.current.value.split(",").map((word) => word.trim());
+    const seen = new Set()
+    const duplicateWords = new Set()
+
+    if (!words) return
+
+    words.forEach((word) => {
+      if (seen.has(word)) {
+        duplicateWords.add(word)
+      } else {
+        seen.add(word)
+      }
+    })
+
+    if (!duplicateWords || duplicateWords.size == 0) {
+      setDuplicateState(false)
+      setShowDupAlert(true)
+      setTimeout(() => {
+        setShowDupAlert(false)
+      }, 1500)
+    } else {
+      setDuplicateState(true)
+      setDuplicateWordCount(duplicateWords.size)
+      setShowDupAlert(true)
+
+      setTimeout(() => {
+        setShowDupAlert(false)
+      }, 1500)
+    }
+
+    const newWords = Array.from(seen).join(',')
+    memoTxAreaRef.current.value = newWords;
+
+    navigator.clipboard.writeText(newWords);
+
+    seen.clear()
+    duplicateWords.clear()
   }
 
   // 필터 적용
@@ -263,13 +305,20 @@ const SearchKeywordTool = () => {
     applyFilters();
   }, [includeWords, excludeWords])
 
-  // 선택된 키워드 변환
+  // ctrl + enter 시 검색어 조회
   useEffect(() => {
-    if (selectedRelKeywords && txArea1Ref.current) {
-      txArea1Ref.current.value = selectedRelKeywords;
-      conversion();
-    }
-  }, [selectedRelKeywords]);
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === 'Enter') {
+        searchBtnRef.current.click();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -325,7 +374,7 @@ const SearchKeywordTool = () => {
                 />
               </div>
               <div className='d-flex gap-3'>
-                <CButton color="primary" onClick={handleSearch}>
+                <CButton color="primary" ref={searchBtnRef} onClick={handleSearch}>
                   조회
                 </CButton>
                 <CButton color="warning" variant='outline'onClick={() => {
@@ -366,7 +415,22 @@ const SearchKeywordTool = () => {
             <div className="mb-3 w-50">
               <CFormLabel htmlFor="textArea1">
                 변환된 키워드 &nbsp;
-                <CButton color="primary" variant='outline' onClick={() => setShowCard(true)}>메모장</CButton>
+                <CButton 
+                  color='warning' 
+                  variant='outline' 
+                  style={{marginRight: '10px'}}
+                  onClick={() => {
+                    txArea1Ref.current.value = ''
+                    setSelectedRelKeywords([]);
+                    }}>
+                  초기화
+                </CButton>
+                <CButton 
+                  color="secondary" 
+                  variant='outline' 
+                  onClick={() => setShowCard(true)}>
+                  메모장
+                </CButton>
                    {/* 플로팅 카드 */}
                     {showCard && (
                       <Draggable>
@@ -382,10 +446,32 @@ const SearchKeywordTool = () => {
                           }}
                         >
                           <CCardBody>
-                            <CFormLabel htmlFor="floatingTextArea">메모장</CFormLabel>
+                            <CFormLabel htmlFor="floatingTextArea" className='d-flex justify-content-between'>
+                              <span>
+                                메모장
+                              </span>
+                              <CButton 
+                                color='info' 
+                                onClick={checkDuplicate}>
+                                중복 제거
+                              </CButton>
+                            </CFormLabel>
+                            <CAlert
+                              color={duplicateState ? 'success' : 'primary'}
+                              className="position-absolute end-0"
+                              style={{ top: '0px' }}
+                              dismissible
+                              visible={showDupAlert}
+                              onClose={() => setShowDupAlert(false)}
+                            >
+                              {duplicateState
+                                ? `총 ${duplicateWordCount}개의 중복된 키워드를 삭제했습니다.`
+                                : '중복된 키워드가 없습니다.'}
+                            </CAlert>
                             <CFormTextarea
                               id="floatingTextArea"
                               style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
+                              ref={memoTxAreaRef}
                             ></CFormTextarea>
                             <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
                               닫기
@@ -400,8 +486,7 @@ const SearchKeywordTool = () => {
                 ref={txArea1Ref}
                 style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
                 value={selectedRelKeywords}
-                onClick={handleTextAreaClick}
-              ></CFormTextarea>
+                onClick={handleTextAreaClick}></CFormTextarea>
             </div>
             <CAlert
               color="primary"
