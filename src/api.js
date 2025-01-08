@@ -18,8 +18,9 @@ export const uploadMyCateExcelApiEP = '/uploadMyCateExcel'
 export const uploadNaverCateExcelApiEP = '/uploadNaverCateExcel'
 export const updateNaverCateAttrApiEP = '/updateNaverCateAttr'
 
-// 키워두 도구 api url
+// 키워드 도구 api url
 export const getAdKeywordApiEp = '/getAdKeyword'
+export const getSearchNaverTagApiEp = '/getSearchNaverTag'
 
 // 화이트리스트 url
 export const createWhiteListApiEp = '/createWitelist'
