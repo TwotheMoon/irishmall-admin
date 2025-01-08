@@ -4,8 +4,7 @@ axios.defaults.withCredentials = true
 
 // 서버 기본 api url
 export const apiServerBaseUrl = 'https://node.moondb.co.kr'
-export const localServerBaseUrl = 'https://node.moondb.co.kr'
-// export const localServerBaseUrl = 'http://localhost:4000'
+export const localServerBaseUrl = 'http://localhost:4000'
 
 export const healthCkEP = '/health'
 export const getTokenApiEP = '/getToken'
@@ -19,8 +18,9 @@ export const uploadMyCateExcelApiEP = '/uploadMyCateExcel'
 export const uploadNaverCateExcelApiEP = '/uploadNaverCateExcel'
 export const updateNaverCateAttrApiEP = '/updateNaverCateAttr'
 
-// 키워두 도구 api url
+// 키워드 도구 api url
 export const getAdKeywordApiEp = '/getAdKeyword'
+export const getSearchNaverTagApiEp = '/getSearchNaverTag'
 
 // 화이트리스트 url
 export const createWhiteListApiEp = '/createWitelist'
