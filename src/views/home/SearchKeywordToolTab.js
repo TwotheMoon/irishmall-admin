@@ -255,7 +255,7 @@ const SearchKeywordToolTab = () => {
 
   // 키워드 중복 검사
   const checkDuplicate = () => {
-    if (!txArea1Ref.current.value) return
+    if (!memoTxAreaRef.current.value) return
 
     const words = memoTxAreaRef.current.value.split(",").map((word) => word.trim());
     const seen = new Set()
@@ -426,7 +426,7 @@ const SearchKeywordToolTab = () => {
               </CButton>
                 {/* 플로팅 카드 */}
                   {showCard && (
-                    <Draggable>
+                    <Draggable cancel='button, textarea'>
                       <CCard
                         style={{
                           position: 'absolute',
@@ -451,8 +451,8 @@ const SearchKeywordToolTab = () => {
                           </CFormLabel>
                           <CAlert
                             color={duplicateState ? 'success' : 'primary'}
-                            className="position-absolute end-0"
-                            style={{ top: '0px' }}
+                            className="position-absolute"
+                            style={{ top: '0px', right: '130px' }}
                             dismissible
                             visible={showDupAlert}
                             onClose={() => setShowDupAlert(false)}
