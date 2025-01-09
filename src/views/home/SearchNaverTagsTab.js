@@ -49,18 +49,20 @@ const SearchNaverTagTab = () => {
       key:"addBtn",
       label: `${selectedRelKeywords?.length} 추가됨`,
       sorter: false,
-      _style: { textAlign: 'center', fontSize: "14px"},
+      _style: { textAlign: 'center', fontSize: "14px", width: "100px"},
     },
     {
       key:"num",
       label: "순번",
       sorter: true,
+      _style: { textAlign: 'center', width: "100px"},
     },
     {
       key:"manuTag",
       label: "키워드",
       sorter: true,
-    },
+      _style: { textAlign: 'center'},
+    }
   ]
 
   // 태그 검색
