@@ -32,6 +32,7 @@ const SearchKeywordToolTab = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
+  const [keywordCount, setKeywordCount] = useState(0);
   const txArea1Ref = useRef();
   const memoTxAreaRef = useRef();
   const searchBtnRef = useRef();
@@ -288,6 +289,7 @@ const SearchKeywordToolTab = () => {
     }
 
     const newWords = Array.from(seen).join(',')
+    setKeywordCount(newWords.split(",").length);
     memoTxAreaRef.current.value = newWords;
 
     navigator.clipboard.writeText(newWords);
@@ -295,6 +297,13 @@ const SearchKeywordToolTab = () => {
     seen.clear()
     duplicateWords.clear()
   }
+
+  // 키워드 개수 검사
+  const checkKeywordCount = () => {
+    try {
+      setKeywordCount(memoTxAreaRef.current.value.split(",").length);
+    } catch (error) {}
+  };
 
   // 필터 적용
   useEffect(() => {
@@ -440,9 +449,17 @@ const SearchKeywordToolTab = () => {
                       >
                         <CCardBody>
                           <CFormLabel htmlFor="floatingTextArea" className='d-flex justify-content-between'>
-                            <span>
-                              메모장
-                            </span>
+                            <div>
+                              <span style={{marginRight: '10px'}}>
+                                메모장
+                              </span>
+                              <span 
+                                style={{
+                                  fontWeight: 'bold', 
+                                  color: keywordCount <= 14 ? "red" : "lightgreen"
+                                }}
+                                >{keywordCount}</span>
+                            </div>
                             <CButton 
                               color='info' 
                               onClick={checkDuplicate}>
@@ -465,6 +482,7 @@ const SearchKeywordToolTab = () => {
                             id="floatingTextArea"
                             style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
                             ref={memoTxAreaRef}
+                            onChange={() => checkKeywordCount()}
                           ></CFormTextarea>
                           <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
                             닫기
