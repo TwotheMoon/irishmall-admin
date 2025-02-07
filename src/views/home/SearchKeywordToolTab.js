@@ -48,7 +48,12 @@ const SearchKeywordToolTab = () => {
   const columns = [
     {
       group: "추가",
-      label: "",
+      label: <CButton
+      color='info'
+      size='sm'
+      onClick={() => {
+        setSelectedRelKeywords(originalItems.map(item => item.relKeyword));
+      }}>전체추가</CButton>,
       _props: {
         style: { textAlign: 'center', width: "100px", paddingBottom: "20px" },
       },
