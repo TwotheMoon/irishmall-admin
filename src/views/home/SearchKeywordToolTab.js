@@ -52,7 +52,10 @@ const SearchKeywordToolTab = () => {
       color='info'
       size='sm'
       onClick={() => {
-        setSelectedRelKeywords(originalItems.map(item => item.relKeyword));
+        setSelectedRelKeywords(prev => {
+          const newKeywords = originalItems.map(item => item.relKeyword);
+          return [...new Set([...prev, ...newKeywords])];
+        });
       }}>전체추가</CButton>,
       _props: {
         style: { textAlign: 'center', width: "100px", paddingBottom: "20px" },
