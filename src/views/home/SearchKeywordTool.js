@@ -24,7 +24,7 @@ const SearchKeywordTool = () => {
         <CTabs activeItemKey={activeTab} onActiveItemChange={(key) => setActiveTab(key)}>
           <CTabList variant="tabs">
             <CTab itemKey="searchKeywordTab">키워드</CTab>
-            <CTab itemKey="searchNaverTagTab">네이버태그</CTab>
+            <CTab itemKey="searchNaverTagTab" onClick={() => console.log("태그클릭")}>네이버태그</CTab>
           </CTabList>
 
           <CTabContent>
