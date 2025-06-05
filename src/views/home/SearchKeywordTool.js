@@ -11,10 +11,8 @@ import {
 } from '@coreui/react-pro'
 import SearchKeywordToolTab from './SearchKeywordToolTab'
 import SearchNaverTagTab from './SearchNaverTagsTab'
-import Draggable from 'react-draggable';
 
 const SearchKeywordTool = () => {
-
 
   return (
     <>
