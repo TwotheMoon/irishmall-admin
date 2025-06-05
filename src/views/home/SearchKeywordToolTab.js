@@ -472,7 +472,8 @@ const SearchKeywordToolTab = () => {
                                 }}
                                 >{keywordCount}</span>
                             </div>
-                              {/* <CButton 
+                            <div>
+                              <CButton 
                                 color='warning' 
                                 variant='outline'
                                 style={{marginRight: '10px'}}
@@ -481,12 +482,13 @@ const SearchKeywordToolTab = () => {
                                   setKeywordCount(0);
                                 }}>
                                 초기화
-                              </CButton> */}
+                              </CButton>
                               <CButton 
                                 color='info' 
                                 onClick={checkDuplicate}>
                                 중복 제거
                               </CButton>
+                            </div>
                           </CFormLabel>
                           <CAlert
                             color={duplicateState ? 'success' : 'primary'}

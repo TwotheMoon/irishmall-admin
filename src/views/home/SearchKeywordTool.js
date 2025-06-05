@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   CAccordionBody,
   CAccordionHeader,
@@ -13,6 +13,7 @@ import SearchKeywordToolTab from './SearchKeywordToolTab'
 import SearchNaverTagTab from './SearchNaverTagsTab'
 
 const SearchKeywordTool = () => {
+  const [activeTab, setActiveTab] = useState('searchKeywordTab')
 
   return (
     <>
@@ -20,7 +21,7 @@ const SearchKeywordTool = () => {
         <CAccordionHeader className="w-100">키워드 도구</CAccordionHeader>
         <CAccordionBody>
           
-        <CTabs activeItemKey="searchKeywordTab">
+        <CTabs activeItemKey={activeTab} onActiveItemChange={(key) => setActiveTab(key)}>
           <CTabList variant="tabs">
             <CTab itemKey="searchKeywordTab">키워드</CTab>
             <CTab itemKey="searchNaverTagTab">네이버태그</CTab>
