@@ -40,7 +40,6 @@ const SearchKeywordTool = () => {
             </CTabPanel>
           </CTabContent>
         </CTabs>
-
           
         </CAccordionBody>
       </CAccordionItem>
