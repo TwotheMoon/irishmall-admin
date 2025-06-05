@@ -507,21 +507,22 @@ const SearchKeywordToolTab = () => {
                             style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
                             ref={memoTxAreaRef}
                             onChange={() => checkKeywordCount()}
-                            onKeyDown={(e) => {
-                              if (e.key === ' ') {
-                                e.preventDefault();
-                                const textarea = memoTxAreaRef.current;
-                                const { selectionStart, selectionEnd, value } = textarea;
-                                // 현재 커서 위치에 , 삽입
-                                const newValue = value.slice(0, selectionStart) + ',' + value.slice(selectionEnd);
-                                textarea.value = newValue;
-                                // 커서 위치를 , 뒤로 이동
-                                textarea.setSelectionRange(selectionStart + 1, selectionStart + 1);
-                                // 키워드 카운트 업데이트
-                                checkKeywordCount();
-                              }
-                            }}
-                          ></CFormTextarea>
+                            // onKeyDown={(e) => {
+                            //   if (e.key === ' ') {
+                            //     e.preventDefault();
+                            //     const textarea = memoTxAreaRef.current;
+                            //     const { selectionStart, selectionEnd, value } = textarea;
+                            //     // 현재 커서 위치에 , 삽입
+                            //     const newValue = value.slice(0, selectionStart) + ',' + value.slice(selectionEnd);
+                            //     textarea.value = newValue;
+                            //     // 커서 위치를 , 뒤로 이동
+                            //     textarea.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                            //     // 키워드 카운트 업데이트
+                            //     checkKeywordCount();
+                            //   }
+                            // }}
+                          >
+                          </CFormTextarea>
                           <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
                             닫기
                           </CButton>
