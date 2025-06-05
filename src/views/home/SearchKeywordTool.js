@@ -15,16 +15,24 @@ import SearchNaverTagTab from './SearchNaverTagsTab'
 const SearchKeywordTool = () => {
   const [activeTab, setActiveTab] = useState('searchKeywordTab')
 
+  const handleTabChange = (key) => {
+    console.log('Tab change attempt:', key);
+    setActiveTab(key);
+  }
+
   return (
     <>
       <CAccordionItem itemKey={1} className="mb-4">
         <CAccordionHeader className="w-100">키워드 도구</CAccordionHeader>
         <CAccordionBody>
           
-        <CTabs activeItemKey={activeTab} onActiveItemChange={(key) => setActiveTab(key)}>
+        <CTabs 
+          activeItemKey={activeTab} 
+          onActiveItemChange={handleTabChange}
+        >
           <CTabList variant="tabs">
             <CTab itemKey="searchKeywordTab">키워드</CTab>
-            <CTab itemKey="searchNaverTagTab" onClick={() => console.log("태그클릭")}>네이버태그</CTab>
+            <CTab itemKey="searchNaverTagTab">네이버태그</CTab>
           </CTabList>
 
           <CTabContent>
