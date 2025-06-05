@@ -327,55 +327,55 @@ const SearchNaverTagTab = () => {
                 onClick={() => setShowCard(true)}>
                 메모장
               </CButton>
-                {/* 플로팅 카드 */}
-                  {showCard && (
-                    <Draggable cancel='button, textarea'>
-                      <CCard
-                        style={{
-                          position: 'absolute',
-                          top: '0%',
-                          left: '70%',
-                          zIndex: 1000,
-                          cursor: 'move',
-                          width: '600px',
-                          height: '300px',
-                        }}
-                      >
-                        <CCardBody>
-                          <CFormLabel htmlFor="floatingTextArea" className='d-flex justify-content-between'>
-                            <span>
-                              메모장
-                            </span>
-                            <CButton 
-                              color='info' 
-                              onClick={checkDuplicate}>
-                              중복 제거
-                            </CButton>
-                          </CFormLabel>
-                          <CAlert
-                            color={duplicateState ? 'success' : 'primary'}
-                            className="position-absolute"
-                            style={{ top: '0px', right: '130px' }}
-                            dismissible
-                            visible={showDupAlert}
-                            onClose={() => setShowDupAlert(false)}
-                          >
-                            {duplicateState
-                              ? `총 ${duplicateWordCount}개의 중복된 키워드를 삭제했습니다.`
-                              : '중복된 키워드가 없습니다.'}
-                          </CAlert>
-                          <CFormTextarea
-                            id="floatingTextArea"
-                            style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
-                            ref={memoTxAreaRef}
-                          ></CFormTextarea>
-                          <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
-                            닫기
+              {/* 플로팅 카드 */}
+                {showCard && (
+                  <Draggable cancel='button, textarea'>
+                    <CCard
+                      style={{
+                        position: 'absolute',
+                        top: '0%',
+                        left: '70%',
+                        zIndex: 1000,
+                        cursor: 'move',
+                        width: '600px',
+                        height: '300px',
+                      }}
+                    >
+                      <CCardBody>
+                        <CFormLabel htmlFor="floatingTextArea" className='d-flex justify-content-between'>
+                          <span>
+                            메모장
+                          </span>
+                          <CButton 
+                            color='info' 
+                            onClick={checkDuplicate}>
+                            중복 제거
                           </CButton>
-                        </CCardBody>
-                      </CCard>
-                    </Draggable>
-                  )}
+                        </CFormLabel>
+                        <CAlert
+                          color={duplicateState ? 'success' : 'primary'}
+                          className="position-absolute"
+                          style={{ top: '0px', right: '130px' }}
+                          dismissible
+                          visible={showDupAlert}
+                          onClose={() => setShowDupAlert(false)}
+                        >
+                          {duplicateState
+                            ? `총 ${duplicateWordCount}개의 중복된 키워드를 삭제했습니다.`
+                            : '중복된 키워드가 없습니다.'}
+                        </CAlert>
+                        <CFormTextarea
+                          id="floatingTextArea"
+                          style={{ minHeight: '200px', height: 'auto', resize: 'none' }}
+                          ref={memoTxAreaRef}
+                        ></CFormTextarea>
+                        <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
+                          닫기
+                        </CButton>
+                      </CCardBody>
+                    </CCard>
+                  </Draggable>
+                )}
             </CFormLabel>
             <CFormTextarea
               id="textArea1"

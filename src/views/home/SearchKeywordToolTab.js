@@ -521,7 +521,8 @@ const SearchKeywordToolTab = () => {
                                 checkKeywordCount();
                               }
                             }}
-                          ></CFormTextarea>
+                          >
+                          </CFormTextarea>
                           <CButton color="secondary" onClick={() => setShowCard(false)} className="mt-2">
                             닫기
                           </CButton>
