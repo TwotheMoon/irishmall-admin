@@ -62,8 +62,8 @@ const DevSetting = () => {
             onClick={() =>
               commonReqModal(
                 'default',
-                '네이버 속성 업데이트',
-                '속성 업데이트는 15분 정도 소요됩니다.<br />속성을 업데이트 하시겠습니까?',
+                '네이버 속성 수동 업데이트',
+                '속성 업데이트는 30분 정도 소요됩니다.<br />매일 아침 8시 자동으로 업데이트합니다.<br />지금 수동으로 속성을 업데이트 하시겠습니까?',
                 setShowModal,
                 upadateNaverCateAttr,
               )
