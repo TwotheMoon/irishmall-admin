@@ -8,7 +8,7 @@ const DevSetting = () => {
     <>
       <CAccordion alwaysOpen activeItemKey={1}>
         <WhiteList />
-        <NasLog />
+        {/* <NasLog /> */}
       </CAccordion>
     </>
   )
