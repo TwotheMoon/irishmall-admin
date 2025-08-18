@@ -17,7 +17,7 @@ const MyCateTable = ({ reFetch }) => {
   const columns = [
     {
       key: 'cateName',
-      label: '카테고리설명',
+      label: '마이카테명',
       filter: true,
       sorter: true,
     },
@@ -63,13 +63,6 @@ const MyCateTable = ({ reFetch }) => {
       sorter: true,
       _style: { width: '80px', backgroundColor: '#FBE2D5', color: 'black', textAlign: 'center' },
     },
-    {
-      key: 'kakaoCate',
-      label: 'K',
-      filter: true,
-      sorter: true,
-      _style: { width: '120px', backgroundColor: '#FFFF00', color: 'black', textAlign: 'center' },
-    },
   ]
 
   // 마이카테고리 읽기
@@ -90,7 +83,7 @@ const MyCateTable = ({ reFetch }) => {
         naverCate: item.naverCate,
         elevenCate: item.elevenCate,
         cupangCate: item.cupangCate,
-        kakaoCate: item.kCate,
+        kakaoCate: item.kakaoCate,
         _cellProps: { all: { className: 'text-center' }, cateName: { className: 'text-start' } },
       }))
       setItems(transformedData)
