@@ -35,6 +35,7 @@ const SearchNaverTagTab = () => {
   const txArea1Ref = useRef();
   const memoTxAreaRef = useRef();
   const searchBtnRef = useRef();
+  const containerRef = useRef();
  
   // 키워드 입력시 5개 유효성 검사
   const handleSearchKeywords = (selectedOptions) => {
@@ -207,7 +208,11 @@ const SearchNaverTagTab = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.key === 'Enter') {
-        searchBtnRef.current.click();
+        // 현재 포커스가 이 컴포넌트 내부에 있는지 확인
+        const activeElement = document.activeElement;
+        if (containerRef.current && containerRef.current.contains(activeElement)) {
+          searchBtnRef.current.click();
+        }
       }
     };
 
@@ -222,7 +227,7 @@ const SearchNaverTagTab = () => {
     <>
       <div>
         {/* 검색어 필터 */}
-        <div className='d-flex gap-4 position-relative'>
+        <div ref={containerRef} className='d-flex gap-4 position-relative'>
           <div className="d-flex flex-column gap-3 w-50">
             <CFormLabel htmlFor="textArea1">
               네이버태그 검색
